@@ -293,13 +293,10 @@
         justify-content: center;
         align-items: center;
         height: 8vw;
-
         position: fixed;
         top: 0;
         left: 0;
-
         z-index: 1000;
-
         pointer-events: none;
     }
 
@@ -331,9 +328,7 @@
         height: 5vw;
         pointer-events: auto;
         background-color: transparent;
-    white-space: nowrap;
-    color: #fff;
-    mix-blend-mode: difference;
+        cursor: pointer;
     }
 
     #footer{
@@ -404,7 +399,6 @@
 
     .tab-link.active {
         opacity: 1 !important;
-        font-style: underline;
     }
 
     .tab-link:hover {
@@ -446,7 +440,7 @@
         display: flex;
         grid-gap: 1vw;
         width: 100%;
-        padding-top: 8vw; /* aggiungi questo */
+        padding-top: 8vw;
         flex-direction: column;
         align-items: center;
 
@@ -541,14 +535,10 @@
     .image-container:hover .overlay {
         opacity: 1; /* Testo e sfondo appaiono in hover */
     }
-    
-    .image-container:hover .overlay span {
-        opacity: 1; /* Fa apparire gradualmente il testo */
-    }
 
     .broccoli{
         position: fixed;
-        z-index: 99999;
+        z-index: 999;
         pointer-events: none;
         font-size: 3vw;
         user-select: none;   
@@ -673,20 +663,11 @@
         
         .img-dual{
             grid-template-columns: repeat(1, 1fr);
-        }
-        
-        .img-dual{
             grid-gap: 3.6vw;
         }
         
         .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
             padding: 0px;
-        }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1.5vw;
-            margin-top:1.5vw;
         }
 
         #footer{
@@ -709,6 +690,7 @@
 
         #sb-container{
             padding-bottom: 10vw;
+            padding-bottom: 20vw;
         }
 
         #sb-container a:hover{
@@ -816,9 +798,6 @@
         
         .img-dual{
             grid-template-columns: repeat(1, 1fr);
-        }
-        
-        .img-dual{
             grid-gap: 3.6vw;
         }
         
@@ -842,16 +821,16 @@
             padding-bottom: 6vw;
         }
 
-        .nav-content {
-            display: flex;
-            justify-content: center;
-            font-weight: 400;
-            font-size: 6vw;
+        #footer-mobile .nav-content{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:4vw;
+            background:white;
+            border:2px solid black;
+            border-radius:100px;
 
-            background-color: white;
-
-            border: 2px solid black;
-            padding: 2vw 4vw;
+            padding:2vw 6vw;
         }
 
         .nav-content span {
@@ -872,6 +851,14 @@
         });
     });
 
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+    });
+
     // Footer navigation
     function toggleContent(section) {
 
@@ -889,41 +876,28 @@
         if(section === 'info'){
             document.getElementById('btn-info').classList.add('active');
             document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'projects.html';
         }
 
         // Attiva About
         if(section === 'class'){
             document.getElementById('btn-class').classList.add('active');
             document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'about.html';
         }
     }
 
     const loghino = document.getElementById("loghino");
 
     loghino.addEventListener("click", () => {
-
         const broccoli = document.createElement("div");
 
-        broccoli.innerHTML = "🥦";
-        broccoli.classList.add("broccoli");
+        broccoli.className = "broccoli";
+        broccoli.textContent = "🥦";
 
-        broccoli.style.left =
-            Math.random() * (window.innerWidth - 50) + "px";
-
-        broccoli.style.top =
-            Math.random() * (window.innerHeight - 50) + "px";
-
-        broccoli.style.transform =
-            `rotate(${Math.random() * 360}deg)`;
+        broccoli.style.left = Math.random() * window.innerWidth + "px";
+        broccoli.style.top = Math.random() * window.innerHeight + "px";
+        broccoli.style.transform = `rotate(${Math.random()*360}deg)`;
 
         document.body.appendChild(broccoli);
-
     });
 </script>
 </html>
