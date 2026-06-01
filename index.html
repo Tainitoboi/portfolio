@@ -262,9 +262,36 @@
 
     .cross-element{
         position: fixed;
-        z-index: 9999;
-        pointer-events: none;
+        z-index: 1000;
+        pointer-events: auto;
+        cursor: pointer;
         width: 3vw;
+        transition: transform 0.2s ease;
+    }
+
+    .cross-element:hover{
+        animation:
+            spinFast 0.4s ease-out,
+            spinSlow 3s linear infinite 0.4s;
+            scale: 1.2;
+    }
+
+    @keyframes spinFast{
+        from{
+            transform: rotate(0deg);
+        }
+        to{
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spinSlow{
+        from{
+            transform: rotate(360deg);
+        }
+        to{
+            transform: rotate(720deg);
+        }
     }
 
     #cross-1{
@@ -889,6 +916,51 @@
         }
     }
 
+    const crosses = document.querySelectorAll(".cross-element");
+
+    let activeFilter = null;
+
+const filters = {
+    "cross-1": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(-40deg)", // rosso-bianco
+    "cross-2": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(160deg)", // blu-bianco
+    "cross-3": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(10) hue-rotate(280deg)",  // verde-bianco
+    "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"  // viola-bianco
+};
+
+    crosses.forEach(cross => {
+
+        cross.addEventListener("click", () => {
+
+            const broccoliList = document.querySelectorAll(".broccoli");
+
+            if (broccoliList.length === 0) {
+                alert("Press the logo to unlock this function");
+                return;
+            }
+
+            const clickedFilter = filters[cross.id];
+
+            if (activeFilter === clickedFilter) {
+
+                activeFilter = null;
+
+                broccoliList.forEach(broccoli => {
+                    broccoli.style.filter = "none";
+                });
+
+                return;
+            }
+
+            activeFilter = clickedFilter;
+
+            broccoliList.forEach(broccoli => {
+                broccoli.style.filter = activeFilter;
+            });
+
+        });
+
+    });
+
     const loghino = document.getElementById("loghino");
 
     loghino.addEventListener("click", () => {
@@ -899,7 +971,12 @@
 
         broccoli.style.left = Math.random() * window.innerWidth + "px";
         broccoli.style.top = Math.random() * window.innerHeight + "px";
-        broccoli.style.transform = `rotate(${Math.random()*360}deg)`;
+        broccoli.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        // applica il filtro attivo globale (se esiste)
+        if (activeFilter) {
+            broccoli.style.filter = activeFilter;
+        }
 
         document.body.appendChild(broccoli);
     });
