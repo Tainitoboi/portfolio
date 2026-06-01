@@ -20,7 +20,7 @@
         <img src="assets/cross.png" class="cross-element" id="cross-4">
     </div>
     <div id="header">
-         <img class="logo" src="assets/tainito_logo.png">
+         <img class="logo" id="loghino" src="assets/tainito_logo.png">
     </div>
     <div class="col12" id="content">
         <div class="paragraph">
@@ -239,6 +239,15 @@
             </div>
         </div>
     </div>
+    <div id="footer-mobile">
+        <div class="column-navbar">
+            <div class="nav-content">
+                <a href="index.html" id="btn-info" class="tab-link active" onclick="toggleContent('info')">Projects</a>
+                <span id="sep-1" class="separator active"> • </span>
+                <a href="about.html" id="btn-class" class="tab-link nav-inactive" onclick="toggleContent('class')">About</a>
+            </div>
+        </div>
+    </div>
 </body>
 
 <style>
@@ -345,6 +354,28 @@
 
     #footer .nav-content,
     #footer .nav-content a{
+        pointer-events: auto;
+    }
+
+    #footer-mobile{
+        width: 96vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 6vw;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        padding-left: 2vw;
+        padding-right: 2vw;
+
+        pointer-events: none;
+        display: none;
+    }
+
+    #footer-mobile .nav-content,
+    #footer-mobile .nav-content a{
         pointer-events: auto;
     }
 
@@ -514,56 +545,156 @@
     .image-container:hover .overlay span {
         opacity: 1; /* Fa apparire gradualmente il testo */
     }
+
+    .broccoli{
+        position: fixed;
+        z-index: 99999;
+        pointer-events: none;
+        font-size: 3vw;
+        user-select: none;   
+    }
     
     @media (max-width: 1024px){
-        .image-container{
+        .cross-element{
+            display: none;
+        }
+
+        #header{
+            height: 20vw;
+        }
+
+        #sb-container{
+            padding-bottom: 10vw;
+        }
+
+        #sb-container a:hover{
+            color: black;
+            background: white;
+        }
+
+        .logo{
+            height: 12vw;
+        }
+
+        #content{
+            padding-top: 24vw;
+            grid-gap: 2.4vw
+        }
+
+        #gallery {
+            display: none;
+            grid-template-columns: repeat(1, 1fr);
+            width: 100%;
+            margin: 0vw;
+            padding:0;
+            gap:2.4vw;
+        }
+
+        #gallery-mobile {
+            display: flex;
+            grid-template-columns: repeat(1, 1fr);
+            width: 100%;
+            margin: 0vw;
+            padding:0;
+            gap:2.4vw;
+        }
+
+        .project-row{
             flex-direction: column;
+            gap: 1.2vw;
         }
         
-        .overlay{
-            display: none;
+        .image-container{
+            width: 75%;
+        }
+
+        .project-infos{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 75%;
+            margin-bottom:1.5vw;
+            margin-top:1.5vw;
+        }
+
+        .project-name{
+            text-align: left;
+        }
+
+        .project-date{
+            text-align: right;
+        }
+
+        .project-infos a{
+            font-size: 2.4vw;
+        }
+
+        .contenuto{
+            width: 100%;
+            padding: 4vw;
+            gap:2.4vw;
+            padding-top: 2vw;
+        }
+
+        .desc-title{
+            font-size: 2.4vw;
+        }
+
+        .paragraph6{
+            width: 95%;
+            margin-bottom:2vw;
+        }
+        
+        .paragraph6 a{
+            font-size: 2.4vw;
+        }
+        
+        .paragraph .title{
+            font-size: 4vw;
+        }
+        
+        .paragraph .scheda-title{
+            font-size:3vw;
+        }
+        
+        .paragraph .scheda-subtitle{
+            font-size:4.2vw;
+        }
+        
+        .credits{
+            width:100%;
+            margin-bottom:3.6vw;
+            margin-top:3vw;
+        }
+        
+        .credits a{
+            font-size: 3.6vw;
+        }
+        
+        .img-dual{
+            grid-template-columns: repeat(1, 1fr);
+        }
+        
+        .img-dual{
+            grid-gap: 3.6vw;
+        }
+        
+        .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
+            padding: 0px;
         }
         
         .project-infos{
             display: flex;
-            margin-bottom:1vw;
-            margin-top:0.7vw;
+            margin-bottom:1.5vw;
+            margin-top:1.5vw;
         }
-        
-        .project-infos a{
-            font-size: 1.8vw;
-            font-weight: 600;
+
+        #footer{
+            display: none;
         }
-        
-        .project-name{
-            text-align: start;
-            width:70%;
-        }
-        
-        .project-date{
-            text-align: end;
-            width:30%;
-        }
-        
-        #gallery {
+
+        #footer-mobile{
             display: flex;
-            grid-gap: 2.4vw;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .contenuto{
-            width: 83.3%;
-        }
-        
-        .paragraph6 a{
-            font-size: 1.2vw;
-        }
-        
-        .image-container:hover .galimg {
-            filter: grayscale(0%);
-            opacity: 1;
         }
     }
     
@@ -702,7 +833,29 @@
         }
 
         #footer{
-            
+            display: none;
+        }
+
+        #footer-mobile{
+            display: flex;
+            justify-content: center;
+            padding-bottom: 6vw;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            font-weight: 400;
+            font-size: 6vw;
+
+            background-color: white;
+
+            border: 2px solid black;
+            padding: 2vw 4vw;
+        }
+
+        .nav-content span {
+            margin: 0 2vw;
         }
     }
 </style>
@@ -750,5 +903,27 @@
             // window.location.href = 'about.html';
         }
     }
+
+    const loghino = document.getElementById("loghino");
+
+    loghino.addEventListener("click", () => {
+
+        const broccoli = document.createElement("div");
+
+        broccoli.innerHTML = "🥦";
+        broccoli.classList.add("broccoli");
+
+        broccoli.style.left =
+            Math.random() * (window.innerWidth - 50) + "px";
+
+        broccoli.style.top =
+            Math.random() * (window.innerHeight - 50) + "px";
+
+        broccoli.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+
+        document.body.appendChild(broccoli);
+
+    });
 </script>
 </html>
