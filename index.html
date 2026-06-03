@@ -981,7 +981,13 @@
     }
 
     window.addEventListener('load', () => {
-        window.scrollTo(0, 0);
+        const savedScroll = localStorage.getItem("scrollPosition");
+        if (savedScroll) {
+            window.scrollTo(0, parseInt(savedScroll, 10));
+            localStorage.removeItem("scrollPosition"); // Pulisci la memoria
+        } else {
+            window.scrollTo(0, 0);
+        }
     });
 
     const themeToggle = document.getElementById("theme-toggle");
@@ -1041,9 +1047,17 @@
     function toggleTheme() {
         const isDark = !html.classList.contains("dark-mode");
         applyTheme(isDark);
-        
-        // Non serve più ricaricare la pagina. L'iniezione dei meta tag 
-        // descritta sopra basta a svegliare la barra del browser mobile.
+
+        if (window.matchMedia("(max-width: 600px)").matches) {
+            // Salva lo stato del menu mobile
+            localStorage.setItem("menuOpen", mobileMenu.classList.contains("open"));
+            
+            // Salva la posizione attuale dello scroll per evitare balzi visivi
+            localStorage.setItem("scrollPosition", window.scrollY);
+
+            // Refresh più leggero rispetto a location.reload()
+            window.location.href = window.location.href;
+        }
     }
 
     themeToggle?.addEventListener("click", toggleTheme);
