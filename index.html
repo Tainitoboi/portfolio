@@ -13,17 +13,10 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff" id="theme-color-meta">
     <meta
         name="theme-color"
         content="#ffffff"
         media="(prefers-color-scheme: light)"
-    >
-
-    <meta
-        name="theme-color"
-        content="#000000"
-        media="(prefers-color-scheme: dark)"
     >
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -997,6 +990,9 @@
 
     const html = document.documentElement;
 
+    const loghino = document.getElementById("loghino");
+    const mobileMenu = document.getElementById("mobile-menu");
+
     function applyTheme(isDark) {
 
         html.classList.toggle("dark-mode", isDark);
@@ -1044,6 +1040,13 @@
         applyTheme(prefersDark);
     }
 
+    if (localStorage.getItem("menuOpen") === "true") {
+        mobileMenu.classList.add("open");
+        document.body.classList.add("no-scroll");
+
+        localStorage.removeItem("menuOpen");
+    }
+
     // Aggiorna il tema se cambia quello del sistema operativo
     window.matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
@@ -1063,6 +1066,18 @@
             !html.classList.contains("dark-mode");
 
         applyTheme(isDark);
+
+        if (
+            window.matchMedia("(max-width: 600px)").matches
+        ) {
+
+            localStorage.setItem(
+                "menuOpen",
+                mobileMenu.classList.contains("open")
+            );
+
+            location.reload();
+        }
     }
 
     themeToggle?.addEventListener("click", toggleTheme);
@@ -1112,9 +1127,6 @@
 
     });
 
-    const loghino = document.getElementById("loghino");
-    const mobileMenu = document.getElementById("mobile-menu");
-
     loghino.addEventListener("click", () => {
 
         // MOBILE
@@ -1122,6 +1134,11 @@
 
             mobileMenu.classList.toggle("open");
             document.body.classList.toggle("no-scroll");
+
+            localStorage.setItem(
+                "menuOpen",
+                mobileMenu.classList.contains("open")
+            );
 
             return;
         }
@@ -1154,6 +1171,8 @@
 
             mobileMenu.classList.remove("open");
             document.body.classList.remove("no-scroll");
+
+            localStorage.removeItem("menuOpen");
 
         });
 
