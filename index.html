@@ -275,6 +275,7 @@
     document.querySelectorAll('.image-container').forEach(container => {
         container.addEventListener('click', function() {
             const url = this.dataset.url;
+
             if (url) window.location.href = url;
         });
     });
@@ -283,91 +284,112 @@
         history.scrollRestoration = 'manual';
     }
 
-    // Gestione del caricamento iniziale e del ripristino dello scroll dopo il refresh
     window.addEventListener('load', () => {
-        const savedScroll = localStorage.getItem("scrollPosition");
-        if (savedScroll) {
-            window.scrollTo(0, parseInt(savedScroll, 10));
-            localStorage.removeItem("scrollPosition"); // Pulisce la memoria dopo l'uso
-        } else {
-            window.scrollTo(0, 0);
-        }
+        window.scrollTo(0, 0);
     });
 
     const themeToggle = document.getElementById("theme-toggle");
     const themeToggleMobile = document.getElementById("theme-toggle-mobile");
+
     const html = document.documentElement;
+
     const loghino = document.getElementById("loghino");
     const mobileMenu = document.getElementById("mobile-menu");
 
     function applyTheme(isDark) {
+
         html.classList.toggle("dark-mode", isDark);
         html.classList.toggle("light-mode", !isDark);
 
-        const oldMeta = document.querySelector('meta[name="theme-color"]');
-        if (oldMeta) oldMeta.remove();
+        const oldMeta = document.querySelector(
+            'meta[name="theme-color"]'
+        );
 
         const newMeta = document.createElement("meta");
         newMeta.name = "theme-color";
         newMeta.content = isDark ? "#000000" : "#ffffff";
+
+        oldMeta.parentNode.removeChild(oldMeta);
         document.head.appendChild(newMeta);
 
-        const oldAppleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-        if (oldAppleMeta) oldAppleMeta.remove();
+        document
+            .querySelector(
+                'meta[name="apple-mobile-web-app-status-bar-style"]'
+            )
+            .setAttribute(
+                "content",
+                isDark ? "black" : "default"
+            );
 
-        const newAppleMeta = document.createElement("meta");
-        newAppleMeta.name = "apple-mobile-web-app-status-bar-style";
-        newAppleMeta.content = isDark ? "black" : "default";
-        document.head.appendChild(newAppleMeta);
-
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+        localStorage.setItem(
+            "theme",
+            isDark ? "dark" : "light"
+        );
     }
 
-    // Caricamento iniziale del tema
+    // Caricamento iniziale
     const savedTheme = localStorage.getItem("theme");
+
     if (savedTheme) {
+
         applyTheme(savedTheme === "dark");
+
     } else {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        ).matches;
+
         applyTheme(prefersDark);
     }
 
     if (localStorage.getItem("menuOpen") === "true") {
         mobileMenu.classList.add("open");
         document.body.classList.add("no-scroll");
+
         localStorage.removeItem("menuOpen");
     }
 
     // Aggiorna il tema se cambia quello del sistema operativo
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    window.matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+
         if (!localStorage.getItem("theme")) {
+
             applyTheme(e.matches);
+
         }
+
     });
 
-    // Toggle del tema con REFRESH ottimizzato per mobile
+    // Toggle
     function toggleTheme() {
-        const isDark = !html.classList.contains("dark-mode");
+
+        const isDark =
+            !html.classList.contains("dark-mode");
+
         applyTheme(isDark);
 
-        if (window.matchMedia("(max-width: 600px)").matches) {
-            // Salva lo stato del menu mobile
-            localStorage.setItem("menuOpen", mobileMenu.classList.contains("open"));
-            
-            // Salva la posizione attuale dello scroll prima del refresh
-            localStorage.setItem("scrollPosition", window.scrollY);
+        if (
+            window.matchMedia("(max-width: 600px)").matches
+        ) {
 
-            // Forza il refresh ricaricando l'URL (sfrutta meglio la cache rispetto a location.reload)
-            window.location.href = window.location.href;
+            localStorage.setItem(
+                "menuOpen",
+                mobileMenu.classList.contains("open")
+            );
+
+            location.reload();
         }
     }
 
     themeToggle?.addEventListener("click", toggleTheme);
-    themeToggleMobile?.addEventListener("click", toggleTheme);
+    themeToggleMobile.addEventListener("click", toggleTheme);
 
-    // Gestione elementi cross (Easter Egg)
     const crosses = document.querySelectorAll(".cross-element");
+
     let activeFilter = null;
+
     const filters = {
         "cross-1": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(-40deg)",
         "cross-2": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(160deg)",
@@ -376,7 +398,10 @@
     };
 
     crosses.forEach(cross => {
+
         cross.addEventListener("click", () => {
+
+            // controlla se esiste almeno un broccolo
             if (!document.querySelector(".broccoli")) {
                 alert("Press the logo to unlock this function");
                 return;
@@ -384,35 +409,57 @@
 
             const clickedFilter = filters[cross.id];
 
+            // toggle del filtro
             if (activeFilter === clickedFilter) {
                 activeFilter = null;
+
                 document.querySelectorAll(".broccoli").forEach(broccoli => {
                     broccoli.style.filter = "none";
                 });
+
                 return;
             }
 
             activeFilter = clickedFilter;
+
             document.querySelectorAll(".broccoli").forEach(broccoli => {
                 broccoli.style.filter = activeFilter;
             });
+
         });
+
     });
 
-    // Click sul logo
     loghino.addEventListener("click", () => {
+
+        // MOBILE
         if (window.matchMedia("(max-width: 600px)").matches){
+
             mobileMenu.classList.toggle("open");
             document.body.classList.toggle("no-scroll");
+
+            localStorage.setItem(
+                "menuOpen",
+                mobileMenu.classList.contains("open")
+            );
+
             return;
         }
 
+        // DESKTOP → broccoli
         const broccoli = document.createElement("div");
+
         broccoli.className = "broccoli";
         broccoli.textContent = "🥦";
-        broccoli.style.left = Math.random() * window.innerWidth + "px";
-        broccoli.style.top = Math.random() * window.innerHeight + "px";
-        broccoli.style.transform = `rotate(${Math.random()*360}deg)`;
+
+        broccoli.style.left =
+            Math.random() * window.innerWidth + "px";
+
+        broccoli.style.top =
+            Math.random() * window.innerHeight + "px";
+
+        broccoli.style.transform =
+            `rotate(${Math.random()*360}deg)`;
 
         if(activeFilter){
             broccoli.style.filter = activeFilter;
@@ -422,10 +469,16 @@
     });
 
     document.querySelectorAll("#mobile-menu a").forEach(link => {
+
         link.addEventListener("click", () => {
+
             mobileMenu.classList.remove("open");
             document.body.classList.remove("no-scroll");
+
+            localStorage.removeItem("menuOpen");
+
         });
+
     });
 </script>
 </html>
