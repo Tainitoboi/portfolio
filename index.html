@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+    const initialTheme = localStorage.getItem("theme");
+
+    if(initialTheme){
+        document.documentElement.className =
+            initialTheme === "dark"
+                ? "dark-mode"
+                : "light-mode";
+    }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff" id="theme-color-meta">
@@ -547,29 +557,29 @@
         user-select: none;   
     }
 
-    body.dark-mode{
+    html.dark-mode body{
         background:black;
         color:white;
     }
 
-    body.dark-mode a {
+    html.dark-mode body a {
         color: white;
     }
 
-    body.dark-mode .tab-link,
-    body.dark-mode .separator,
-    body.dark-mode .side-text,
-    body.dark-mode .project-infos a,
-    body.dark-mode #sb-container a {
+    html.dark-mode .tab-link,
+    html.dark-mode .separator,
+    html.dark-mode .side-text,
+    html.dark-mode .project-infos a,
+    html.dark-mode #sb-container a {
         color: white;
     }
 
-    body.dark-mode .tab-link:hover{
+    html.dark-mode .tab-link:hover{
         color:black;
         background:white;
     }
 
-    body.dark-mode #sb-container a:hover{
+    html.dark-mode #sb-container a:hover{
         color:black;
         background:white;
     }
@@ -604,21 +614,16 @@
         transition:0.3s;
     }
 
-    .dark-mode{
-        background: black;
-        color: white;
-    }
-
-    body.dark-mode .toggle-track{
+    html.dark-mode .toggle-track{
         border-color:white;
     }
 
-    body.dark-mode .toggle-knob{
+    html.dark-mode .toggle-knob{
         background:white;
         transform:translateX(1.05vw);
     }
 
-    body.dark-mode .cross-element{
+    html.dark-mode .cross-element{
         filter: invert(1);
     }
 
@@ -663,11 +668,11 @@
         overflow: hidden;
     }
 
-    body.dark-mode #mobile-menu{
+    html.dark-mode #mobile-menu{
         background: rgba(0,0,0,0.95);
     }
 
-    body.dark-mode #mobile-menu a{
+    html.dark-mode #mobile-menu a{
         color: white;
     }
     
@@ -953,7 +958,7 @@
             height: 4.4vw;
         }
 
-        body.dark-mode .toggle-knob {
+        html.dark-mode .toggle-knob {
             transform: translateX(4.05vw);
         }
     }
@@ -978,38 +983,72 @@
 
     const themeToggle = document.getElementById("theme-toggle");
     const themeToggleMobile = document.getElementById("theme-toggle-mobile");
-    const body = document.body;
 
-    document
-    .querySelector('meta[name="theme-color"]')
-    .setAttribute(
-        "content",
-        body.classList.contains("dark-mode")
-            ? "#000000"
-            : "#ffffff"
-    );
+    const html = document.documentElement;
 
-    function toggleTheme() {
-        body.classList.toggle("dark-mode");
+    function applyTheme(isDark) {
 
-        const dark = body.classList.contains("dark-mode");
+        html.classList.toggle("dark-mode", isDark);
+        html.classList.toggle("light-mode", !isDark);
 
         document
             .querySelector('meta[name="theme-color"]')
             .setAttribute(
                 "content",
-                dark ? "#000000" : "#ffffff"
+                isDark ? "#000000" : "#ffffff"
             );
 
         document
             .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
             .setAttribute(
                 "content",
-                dark ? "black" : "default"
+                isDark ? "black" : "default"
             );
+
+        localStorage.setItem(
+            "theme",
+            isDark ? "dark" : "light"
+        );
     }
 
-    themeToggle.addEventListener("click", toggleTheme);
+    // Caricamento iniziale
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) {
+
+        applyTheme(savedTheme === "dark");
+
+    } else {
+
+        const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        ).matches;
+
+        applyTheme(prefersDark);
+    }
+
+    // Aggiorna il tema se cambia quello del sistema operativo
+    window.matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+
+        if (!localStorage.getItem("theme")) {
+
+            applyTheme(e.matches);
+
+        }
+
+    });
+
+    // Toggle
+    function toggleTheme() {
+
+        const isDark =
+            !html.classList.contains("dark-mode");
+
+        applyTheme(isDark);
+    }
+
+    themeToggle?.addEventListener("click", toggleTheme);
     themeToggleMobile.addEventListener("click", toggleTheme);
 
     const crosses = document.querySelectorAll(".cross-element");
