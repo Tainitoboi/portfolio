@@ -980,11 +980,7 @@
     const themeToggleMobile = document.getElementById("theme-toggle-mobile");
     const body = document.body;
 
-    themeToggle.addEventListener("click", () => {
-        body.classList.toggle("dark-mode");
-    });
-
-    themeToggleMobile.addEventListener("click", () => {
+    function toggleTheme() {
         body.classList.toggle("dark-mode");
 
         const dark = body.classList.contains("dark-mode");
@@ -995,7 +991,10 @@
                 "content",
                 dark ? "#000000" : "#ffffff"
             );
-    });
+    }
+
+    themeToggle.addEventListener("click", toggleTheme);
+    themeToggleMobile.addEventListener("click", toggleTheme);
 
     const crosses = document.querySelectorAll(".cross-element");
 
