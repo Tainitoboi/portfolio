@@ -980,6 +980,15 @@
     const themeToggleMobile = document.getElementById("theme-toggle-mobile");
     const body = document.body;
 
+    document
+    .querySelector('meta[name="theme-color"]')
+    .setAttribute(
+        "content",
+        body.classList.contains("dark-mode")
+            ? "#000000"
+            : "#ffffff"
+    );
+
     function toggleTheme() {
         body.classList.toggle("dark-mode");
 
@@ -990,6 +999,13 @@
             .setAttribute(
                 "content",
                 dark ? "#000000" : "#ffffff"
+            );
+
+        document
+            .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+            .setAttribute(
+                "content",
+                dark ? "black" : "default"
             );
     }
 
