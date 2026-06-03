@@ -22,6 +22,15 @@
     <div id="header">
          <img class="logo" id="loghino" src="assets/tainito_logo.png">
     </div>
+    <div id="mobile-menu">
+        <a href="index.html">Projects</a>
+        <a href="about.html">About</a>
+        <div class="theme-toggle" id="theme-toggle-mobile">
+            <div class="toggle-track">
+                <div class="toggle-knob"></div>
+            </div>
+        </div>
+    </div>
     <div class="col12" id="content">
         <div class="paragraph">
             <div id="sp-container"><a class="scheda-title">stuff i made here 👇🏻</a></div>
@@ -228,23 +237,19 @@
     <div id="footer">
         <div class="column-navbar">
             <div class="nav-content">
-                <a href="index.html" id="btn-info" class="tab-link active" onclick="toggleContent('info')">Projects</a>
+                <a href="index.html" id="btn-info" class="tab-link active">Projects</a>
                 <span id="sep-1" class="separator active"> • </span>
-                <a href="about.html" id="btn-class" class="tab-link nav-inactive" onclick="toggleContent('class')">About</a>
+                <a href="about.html" id="btn-class" class="tab-link nav-inactive">About</a>
             </div>
         </div>
         <div class="column-navbar">
             <div class="nav-content">
-                <a>© Tainito 2026.</a>
-            </div>
-        </div>
-    </div>
-    <div id="footer-mobile">
-        <div class="column-navbar">
-            <div class="nav-content">
-                <a href="index.html" id="btn-info" class="tab-link active" onclick="toggleContent('info')">Projects</a>
-                <span id="sep-1" class="separator active"> • </span>
-                <a href="about.html" id="btn-class" class="tab-link nav-inactive" onclick="toggleContent('class')">About</a>
+                <a>© Tainito.</a>
+                <div class="theme-toggle" id="theme-toggle">
+                    <div class="toggle-track">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -254,6 +259,11 @@
     body{
         overflow-x: hidden;
         margin: 0;
+        color: black;
+    }
+
+    body a{
+        color: black;
     }
 
     html{
@@ -273,7 +283,7 @@
         animation:
             spinFast 0.4s ease-out,
             spinSlow 3s linear infinite 0.4s;
-            scale: 1.2;
+            transform: scale(1.2);
     }
 
     @keyframes spinFast{
@@ -342,7 +352,6 @@
     }
 
     #sb-container a{
-        color: black;
         text-decoration: none;
     }
 
@@ -379,28 +388,6 @@
         pointer-events: auto;
     }
 
-    #footer-mobile{
-        width: 96vw;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 6vw;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 1000;
-        padding-left: 2vw;
-        padding-right: 2vw;
-
-        pointer-events: none;
-        display: none;
-    }
-
-    #footer-mobile .nav-content,
-    #footer-mobile .nav-content a{
-        pointer-events: auto;
-    }
-
     .nav-content {
         display: flex;
         justify-content: space-between;
@@ -412,7 +399,6 @@
 
     .nav-content a {
         text-decoration: none;
-        color: black;
     }
 
     .tab-link {
@@ -420,12 +406,7 @@
         transition: opacity 0.3s ease;
         cursor: pointer;
         text-decoration: none;
-        color: black;
         display: inline-block;
-    }
-
-    .tab-link.active {
-        opacity: 1 !important;
     }
 
     .tab-link:hover {
@@ -441,7 +422,6 @@
         opacity: 1;
         transition: opacity 0.3s ease;
         text-decoration: none;
-        color: black;
         display: inline-block;
     }
 
@@ -476,7 +456,6 @@
         font-size: 1.2vw;
     }
 
-    /* Griglia delle immagini */
     #gallery {
         display: flex;
         grid-gap: 2.4vw;
@@ -538,8 +517,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: rgba(0, 0, 0, 0.4); /* Sfondo nero semitrasparente */
-        opacity: 0; /* Inizialmente invisibile */
+        background-color: rgba(0, 0, 0, 0.4);
+        opacity: 0;
         transition: opacity 0.3s ease;
     }
 
@@ -548,19 +527,14 @@
         font-size: 1.2vw;
         font-weight: bold;
         text-align: center;
-        transform: scale(0.8); /* Inizia leggermente ridotto */
+        transform: scale(0.8);
         opacity: 1;
         transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    /* Effetti hover */
     .image-container:hover .galimg {
         filter: invert();
         opacity: 1;
-    }
-
-    .image-container:hover .overlay {
-        opacity: 1; /* Testo e sfondo appaiono in hover */
     }
 
     .broccoli{
@@ -569,6 +543,130 @@
         pointer-events: none;
         font-size: 3vw;
         user-select: none;   
+    }
+
+    body.dark-mode{
+        background:black;
+        color:white;
+    }
+
+    body.dark-mode a {
+        color: white;
+    }
+
+    body.dark-mode .tab-link,
+    body.dark-mode .separator,
+    body.dark-mode .side-text,
+    body.dark-mode .project-infos a,
+    body.dark-mode #sb-container a {
+        color: white;
+    }
+
+    body.dark-mode .tab-link:hover{
+        color:black;
+        background:white;
+    }
+
+    body.dark-mode #sb-container a:hover{
+        color:black;
+        background:white;
+    }
+
+    .theme-toggle{
+        display:flex;
+        align-items:center;
+        gap:0.5vw;
+        cursor:pointer;
+        user-select:none;
+    }
+
+    .toggle-track{
+        width:2.5vw;
+        height:1.4vw;
+        border:1.5px solid black;
+        border-radius:100px;
+        position:relative;
+        transition:0.3s;
+        display: flex;
+        align-items: center;
+        margin-left: 0.5vw;
+    }
+
+    .toggle-knob{
+        position:absolute;
+        left:0.15vw;
+        width:1.1vw;
+        height:1.1vw;
+        background:black;
+        border-radius:50%;
+        transition:0.3s;
+    }
+
+    .dark-mode{
+        background: black;
+        color: white;
+    }
+
+    body.dark-mode .toggle-track{
+        border-color:white;
+    }
+
+    body.dark-mode .toggle-knob{
+        background:white;
+        transform:translateX(1.05vw);
+    }
+
+    body.dark-mode .cross-element{
+        filter: invert(1);
+    }
+
+    #mobile-menu{
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: 100vw;
+        height: 100vh;
+
+        background: rgba(255,255,255,0.95);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        gap: 8vw;
+
+        z-index: 999;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: 0.3s ease;
+    }
+
+    #mobile-menu a{
+        font-family: 'Sora', sans-serif;
+        font-size: 6vw;
+        text-decoration: none;
+        color: black;
+    }
+
+    #mobile-menu.open{
+        opacity: 1;
+        visibility: visible;
+    }
+
+    body.no-scroll{
+        overflow: hidden;
+    }
+
+    body.dark-mode #mobile-menu{
+        background: rgba(0,0,0,0.95);
+    }
+
+    body.dark-mode #mobile-menu a{
+        color: white;
     }
     
     @media (max-width: 1024px){
@@ -700,10 +798,6 @@
         #footer{
             display: none;
         }
-
-        #footer-mobile{
-            display: flex;
-        }
     }
     
     @media (max-width: 600px){
@@ -831,33 +925,9 @@
         .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
             padding: 0px;
         }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1.5vw;
-            margin-top:1.5vw;
-        }
 
         #footer{
             display: none;
-        }
-
-        #footer-mobile{
-            display: flex;
-            justify-content: center;
-            padding-bottom: 6vw;
-        }
-
-        #footer-mobile .nav-content{
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            font-size:4vw;
-            background:white;
-            border:2px solid black;
-            border-radius:100px;
-
-            padding:2vw 6vw;
         }
 
         .nav-content span {
@@ -867,18 +937,32 @@
         .broccoli{
             font-size: 8vw;
         }
+
+        .toggle-track {
+            width: 10vw;
+            height: 5.6vw;
+            border: 2px solid black;
+            margin-left: 0.5vw;
+        }
+
+        .toggle-knob {
+            left: 0.65vw;
+            width: 4.4vw;
+            height: 4.4vw;
+        }
+
+        body.dark-mode .toggle-knob {
+            transform: translateX(4.05vw);
+        }
     }
 </style>
 
 <script>
-    // Click sulle immagini
     document.querySelectorAll('.image-container').forEach(container => {
         container.addEventListener('click', function() {
-            const url = this.getAttribute('data-url');
+            const url = this.dataset.url;
 
-            if (url) {
-                window.location.href = url;
-            }
+            if (url) window.location.href = url;
         });
     });
 
@@ -890,61 +974,46 @@
         window.scrollTo(0, 0);
     });
 
-    // Footer navigation
-    function toggleContent(section) {
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeToggleMobile = document.getElementById("theme-toggle-mobile");
+    const body = document.body;
 
-        // Reset di tutti i link
-        document.querySelectorAll('.tab-link').forEach(link => {
-            link.classList.remove('active');
-        });
+    themeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+    });
 
-        // Reset separatori
-        document.querySelectorAll('.separator').forEach(sep => {
-            sep.classList.remove('active');
-        });
-
-        // Attiva Projects
-        if(section === 'info'){
-            document.getElementById('btn-info').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-        }
-
-        // Attiva About
-        if(section === 'class'){
-            document.getElementById('btn-class').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-        }
-    }
+    themeToggleMobile.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+    });
 
     const crosses = document.querySelectorAll(".cross-element");
 
     let activeFilter = null;
 
-const filters = {
-    "cross-1": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(-40deg)", // rosso-bianco
-    "cross-2": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(160deg)", // blu-bianco
-    "cross-3": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(10) hue-rotate(280deg)",  // verde-bianco
-    "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"  // viola-bianco
-};
+    const filters = {
+        "cross-1": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(-40deg)",
+        "cross-2": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(160deg)",
+        "cross-3": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(10) hue-rotate(280deg)",
+        "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"
+    };
 
     crosses.forEach(cross => {
 
         cross.addEventListener("click", () => {
 
-            const broccoliList = document.querySelectorAll(".broccoli");
-
-            if (broccoliList.length === 0) {
+            // controlla se esiste almeno un broccolo
+            if (!document.querySelector(".broccoli")) {
                 alert("Press the logo to unlock this function");
                 return;
             }
 
             const clickedFilter = filters[cross.id];
 
+            // toggle del filtro
             if (activeFilter === clickedFilter) {
-
                 activeFilter = null;
 
-                broccoliList.forEach(broccoli => {
+                document.querySelectorAll(".broccoli").forEach(broccoli => {
                     broccoli.style.filter = "none";
                 });
 
@@ -953,7 +1022,7 @@ const filters = {
 
             activeFilter = clickedFilter;
 
-            broccoliList.forEach(broccoli => {
+            document.querySelectorAll(".broccoli").forEach(broccoli => {
                 broccoli.style.filter = activeFilter;
             });
 
@@ -962,23 +1031,50 @@ const filters = {
     });
 
     const loghino = document.getElementById("loghino");
+    const mobileMenu = document.getElementById("mobile-menu");
 
     loghino.addEventListener("click", () => {
+
+        // MOBILE
+        if (window.matchMedia("(max-width: 600px)").matches){
+
+            mobileMenu.classList.toggle("open");
+            document.body.classList.toggle("no-scroll");
+
+            return;
+        }
+
+        // DESKTOP → broccoli
         const broccoli = document.createElement("div");
 
         broccoli.className = "broccoli";
         broccoli.textContent = "🥦";
 
-        broccoli.style.left = Math.random() * window.innerWidth + "px";
-        broccoli.style.top = Math.random() * window.innerHeight + "px";
-        broccoli.style.transform = `rotate(${Math.random() * 360}deg)`;
+        broccoli.style.left =
+            Math.random() * window.innerWidth + "px";
 
-        // applica il filtro attivo globale (se esiste)
-        if (activeFilter) {
+        broccoli.style.top =
+            Math.random() * window.innerHeight + "px";
+
+        broccoli.style.transform =
+            `rotate(${Math.random()*360}deg)`;
+
+        if(activeFilter){
             broccoli.style.filter = activeFilter;
         }
 
         document.body.appendChild(broccoli);
+    });
+
+    document.querySelectorAll("#mobile-menu a").forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            mobileMenu.classList.remove("open");
+            document.body.classList.remove("no-scroll");
+
+        });
+
     });
 </script>
 </html>
