@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff" id="theme-color-meta">
 
     <title>Tainito - Portfolio</title>
 
@@ -626,7 +627,7 @@
         left: 0;
 
         width: 100%;
-        height: 100%;
+        height: 100dvh;
 
         background: rgba(255,255,255,0.95);
 
@@ -984,6 +985,15 @@
 
     themeToggleMobile.addEventListener("click", () => {
         body.classList.toggle("dark-mode");
+
+        const dark = body.classList.contains("dark-mode");
+
+        document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute(
+                "content",
+                dark ? "#000000" : "#ffffff"
+            );
     });
 
     const crosses = document.querySelectorAll(".cross-element");
