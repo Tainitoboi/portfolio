@@ -272,124 +272,78 @@
 </body>
 
 <script>
+    // Navigazione progetti al click sulle immagini
     document.querySelectorAll('.image-container').forEach(container => {
         container.addEventListener('click', function() {
             const url = this.dataset.url;
-
             if (url) window.location.href = url;
         });
     });
 
+    // Mantiene lo scroll nativo all'avvio della pagina
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
-
     window.addEventListener('load', () => {
         window.scrollTo(0, 0);
     });
 
     const themeToggle = document.getElementById("theme-toggle");
     const themeToggleMobile = document.getElementById("theme-toggle-mobile");
-
     const html = document.documentElement;
-
     const loghino = document.getElementById("loghino");
     const mobileMenu = document.getElementById("mobile-menu");
 
+    // IL NUOVO METODO: Aggiorna l'attributo data-theme e i meta tag al millesimo di secondo
     function applyTheme(isDark) {
+        if (isDark) {
+            html.setAttribute("data-theme", "dark");
+        } else {
+            html.removeAttribute("data-theme");
+        }
 
-        html.classList.toggle("dark-mode", isDark);
-        html.classList.toggle("light-mode", !isDark);
+        // Sincronizza al volo il colore della scheda del browser (senza refresh)
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute("content", isDark ? "#000000" : "#ffffff");
+        }
 
-        const oldMeta = document.querySelector(
-            'meta[name="theme-color"]'
-        );
+        const appleStatusMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+        if (appleStatusMeta) {
+            appleStatusMeta.setAttribute("content", isDark ? "black" : "default");
+        }
 
-        const newMeta = document.createElement("meta");
-        newMeta.name = "theme-color";
-        newMeta.content = isDark ? "#000000" : "#ffffff";
-
-        oldMeta.parentNode.removeChild(oldMeta);
-        document.head.appendChild(newMeta);
-
-        document
-            .querySelector(
-                'meta[name="apple-mobile-web-app-status-bar-style"]'
-            )
-            .setAttribute(
-                "content",
-                isDark ? "black" : "default"
-            );
-
-        localStorage.setItem(
-            "theme",
-            isDark ? "dark" : "light"
-        );
+        localStorage.setItem("theme", isDark ? "dark" : "light");
     }
 
-    // Caricamento iniziale
+    // Caricamento del tema all'avvio del sito
     const savedTheme = localStorage.getItem("theme");
-
     if (savedTheme) {
-
         applyTheme(savedTheme === "dark");
-
     } else {
-
-        const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches;
-
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         applyTheme(prefersDark);
     }
 
-    if (localStorage.getItem("menuOpen") === "true") {
-        mobileMenu.classList.add("open");
-        document.body.classList.add("no-scroll");
-
-        localStorage.removeItem("menuOpen");
-    }
-
-    // Aggiorna il tema se cambia quello del sistema operativo
-    window.matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", (e) => {
-
+    // Listener per il cambio tema del sistema operativo
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
         if (!localStorage.getItem("theme")) {
-
             applyTheme(e.matches);
-
         }
-
     });
 
-    // Toggle
+    // Toggle del tema FULMINEO (Rimosso qualsiasi window.location o reload!)
     function toggleTheme() {
-
-        const isDark =
-            !html.classList.contains("dark-mode");
-
+        const isDark = html.getAttribute("data-theme") !== "dark";
         applyTheme(isDark);
-
-        if (
-            window.matchMedia("(max-width: 600px)").matches
-        ) {
-
-            localStorage.setItem(
-                "menuOpen",
-                mobileMenu.classList.contains("open")
-            );
-
-            location.reload();
-        }
     }
 
     themeToggle?.addEventListener("click", toggleTheme);
-    themeToggleMobile.addEventListener("click", toggleTheme);
+    themeToggleMobile?.addEventListener("click", toggleTheme);
 
+    // Gestione Croci (Easter egg)
     const crosses = document.querySelectorAll(".cross-element");
-
     let activeFilter = null;
-
     const filters = {
         "cross-1": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(-40deg)",
         "cross-2": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(160deg)",
@@ -398,10 +352,7 @@
     };
 
     crosses.forEach(cross => {
-
         cross.addEventListener("click", () => {
-
-            // controlla se esiste almeno un broccolo
             if (!document.querySelector(".broccoli")) {
                 alert("Press the logo to unlock this function");
                 return;
@@ -409,57 +360,35 @@
 
             const clickedFilter = filters[cross.id];
 
-            // toggle del filtro
             if (activeFilter === clickedFilter) {
                 activeFilter = null;
-
                 document.querySelectorAll(".broccoli").forEach(broccoli => {
                     broccoli.style.filter = "none";
                 });
-
                 return;
             }
 
             activeFilter = clickedFilter;
-
             document.querySelectorAll(".broccoli").forEach(broccoli => {
                 broccoli.style.filter = activeFilter;
             });
-
         });
-
     });
 
+    // Interazione col logo (Menu mobile o Broccoli desktop)
     loghino.addEventListener("click", () => {
-
-        // MOBILE
         if (window.matchMedia("(max-width: 600px)").matches){
-
             mobileMenu.classList.toggle("open");
             document.body.classList.toggle("no-scroll");
-
-            localStorage.setItem(
-                "menuOpen",
-                mobileMenu.classList.contains("open")
-            );
-
             return;
         }
 
-        // DESKTOP → broccoli
         const broccoli = document.createElement("div");
-
         broccoli.className = "broccoli";
         broccoli.textContent = "🥦";
-
-        broccoli.style.left =
-            Math.random() * window.innerWidth + "px";
-
-        broccoli.style.top =
-            Math.random() * window.innerHeight + "px";
-
-        broccoli.style.transform =
-            `rotate(${Math.random()*360}deg)`;
+        broccoli.style.left = Math.random() * window.innerWidth + "px";
+        broccoli.style.top = Math.random() * window.innerHeight + "px";
+        broccoli.style.transform = `rotate(${Math.random()*360}deg)`;
 
         if(activeFilter){
             broccoli.style.filter = activeFilter;
@@ -468,17 +397,12 @@
         document.body.appendChild(broccoli);
     });
 
+    // Chiusura menu mobile al click sui link
     document.querySelectorAll("#mobile-menu a").forEach(link => {
-
         link.addEventListener("click", () => {
-
             mobileMenu.classList.remove("open");
             document.body.classList.remove("no-scroll");
-
-            localStorage.removeItem("menuOpen");
-
         });
-
     });
 </script>
 </html>
