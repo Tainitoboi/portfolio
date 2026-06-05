@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. VARIABILI E IMPOSTAZIONI GLOBALI (Il segreto della leggerezza)
+   1. VARIABILI E IMPOSTAZIONI GLOBALI
    ========================================================================== */
 :root {
     --bg-color: #ffffff;
@@ -11,7 +11,6 @@
     --cross-filter: none;
 }
 
-/* Quando JS assegna data-theme="dark", i colori cambiano istantaneamente */
 [data-theme="dark"] {
     --bg-color: #000000;
     --text-color: #ffffff;
@@ -20,6 +19,12 @@
     --menu-mobile-bg: rgba(0, 0, 0, 0.95);
     --knob-transform: translateX(1.05vw);
     --cross-filter: invert(1);
+}
+
+@media (max-width: 1024px) {
+    [data-theme="dark"] {
+        --knob-transform: translateX(2.05vw);
+    }
 }
 
 @media (max-width: 600px) {
@@ -43,13 +48,28 @@ body.no-scroll {
     overflow: hidden;
 }
 
+/* ==========================================================================
+   2. TIPOGRAFIA GLOBALE E LINK
+   ========================================================================== */
 a {
     color: var(--text-color);
     text-decoration: none;
 }
 
+.link {
+    color: var(--text-color);
+    text-underline-offset: 0.15em;
+    text-decoration: underline;
+    transition: 0.1s ease;
+}
+
+.link:hover {
+    color: var(--bg-color);
+    background: var(--text-color);
+}
+
 /* ==========================================================================
-   2. ELEMENTI ANIMATI & EASTER EGGS
+   3. ELEMENTI ANIMATI & EASTER EGGS (Ottimizzati GPU)
    ========================================================================== */
 .cross-element {
     position: fixed;
@@ -92,7 +112,7 @@ a {
 }
 
 /* ==========================================================================
-   3. STRUTTURA E LAYOUT DESKTOP
+   4. LAYOUT GENERALE & HEADER/FOOTER (Desktop)
    ========================================================================== */
 #header {
     width: 100%;
@@ -126,20 +146,90 @@ a {
     font-size: 1.2vw;
 }
 
-#sp-container, #sb-container {
-    text-align: center;
-    font-size: 1.2vw;
-    padding-top: 0.6vw;
+#footer {
+    width: 96vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 6vw;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    pointer-events: none;
 }
 
-#sp-container { padding-bottom: 0.4vw; }
-#sb-container { padding-bottom: 2.3vw; }
+#footer .nav-content, #footer .nav-content a {
+    pointer-events: auto;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 1.2vw;
+}
+
+.nav-content span {
+    margin: 0 0.5vw;
+}
+
+.tab-link, .separator {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    display: inline-block;
+}
+
+.separator.active {
+    opacity: 1 !important;
+}
 
 #sb-container a:hover, .tab-link:hover {
     color: var(--bg-color);
     background: var(--text-color);
 }
 
+/* ==========================================================================
+   5. CONTROLLO INPUT (Theme Toggle)
+   ========================================================================== */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-track {
+    width: 2.5vw;
+    height: 1.4vw;
+    border: 1.5px solid var(--toggle-border);
+    border-radius: 100px;
+    position: relative;
+    transition: border-color 0.3s;
+    display: flex;
+    align-items: center;
+    margin-left: 0.5vw;
+}
+
+.toggle-knob {
+    position: absolute;
+    left: 0.15vw;
+    width: 1.1vw;
+    height: 1.1vw;
+    background: var(--toggle-knob);
+    border-radius: 50%;
+    transform: var(--knob-transform);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+/* ==========================================================================
+   6. INTERFACCIA E GALLERIA PROGETTI (Desktop index.html)
+   ========================================================================== */
 #gallery {
     display: flex;
     grid-gap: 2.4vw;
@@ -184,6 +274,11 @@ a {
     width: 55%;
 }
 
+.image-container img {
+    width: 100%;
+    display: block;
+}
+
 .galimg {
     object-fit: cover;
     transition: filter 0.1s ease, opacity 0.1s ease;
@@ -222,81 +317,86 @@ a {
     display: none;
 }
 
-#footer {
-    width: 96vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 6vw;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    padding-left: 2vw;
-    padding-right: 2vw;
-    pointer-events: none;
+/* ==========================================================================
+   7. PAGINE SPECIFICHE (About & Schede Progetto come Succo)
+   ========================================================================== */
+#sp-container, #sb-container {
+    text-align: center;
+    font-size: 1.2vw;
+    padding-top: 0.6vw;
+}
+#sp-container { padding-bottom: 0.4vw; }
+#sb-container { padding-bottom: 2.3vw; }
+
+#st-container {
+    text-align: center;
+    font-size: 2vw;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
-#footer .nav-content, #footer .nav-content a {
-    pointer-events: auto;
-}
-
-.nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Sora', sans-serif;
-    font-weight: 400;
+#ss-container {
+    text-align: center;
     font-size: 1.2vw;
 }
 
-.tab-link, .separator {
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    display: inline-block;
+.paragraph6 {
+    width: 55%;
+    margin-bottom: 1vw;
+    text-align: center;
 }
 
-.separator.active {
-    opacity: 1 !important;
+.paragraph6 a {
+    font-size: 1vw;
+    font-weight: 400;
 }
 
-.nav-content span {
-    margin: 0 0.5vw;
+.desc-title {
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.4vw;
+    text-transform: uppercase;
+    font-size: 1vw;
 }
 
-.theme-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5vw;
-    cursor: pointer;
-    user-select: none;
+.img-dual {
+    width: 55%;
+    margin-bottom: 0vw;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1vw;
 }
 
-.toggle-track {
-    width: 2.5vw;
-    height: 1.4vw;
-    border: 1.5px solid var(--toggle-border);
-    border-radius: 100px;
+.img-dual img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.video-container {
     position: relative;
-    transition: border-color 0.3s;
+    width: 55%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    margin-left: 0.5vw;
 }
 
-.toggle-knob {
-    position: absolute;
-    left: 0.15vw;
-    width: 1.1vw;
-    height: 1.1vw;
-    background: var(--toggle-knob);
-    border-radius: 50%;
-    transform: var(--knob-transform);
-    transition: transform 0.3s, background-color 0.3s;
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.credits {
+    width: 55%;
+    padding-bottom: 2.3vw;
+    font-size: 1vw;
+    text-align: center;
 }
 
 /* ==========================================================================
-   4. MENU MOBILE OVERLAY
+   8. MENU MOBILE OVERLAY
    ========================================================================== */
 #mobile-menu {
     position: fixed;
@@ -328,14 +428,14 @@ a {
 }
 
 /* ==========================================================================
-   5. RESPONSIVE MEDIA QUERIES
+   9. RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 1024px) {
     .cross-element { display: none; }
     #header { height: 20vw; }
     .logo { height: 12vw; }
     #sb-container { padding-bottom: 10vw; }
-    #content { padding-top: 24vw; grid-gap: 2.4vw; }
+    #content { padding-top: 20vw; grid-gap: 2.4vw; }
     
     #gallery { display: none; }
     #gallery-mobile {
@@ -349,7 +449,9 @@ a {
     }
 
     .project-row { flex-direction: column; gap: 1.2vw; }
-    .image-container, .project-infos { width: 75%; }
+    .video-container, .image-container, .img-dual, .project-infos { width: 75%; }
+
+    .img-dual{grid-gap: 2.4vw;}
     
     .project-infos {
         display: flex;
@@ -362,24 +464,68 @@ a {
     .project-infos a { font-size: 2.4vw; }
     
     .paragraph .title { font-size: 4vw; }
-    .paragraph .scheda-title { font-size: 3vw; }
-    .paragraph .scheda-subtitle { font-size: 4.2vw; }
+    .paragraph .scheda-title { font-size: 4.2vw; }
+    .paragraph .scheda-subtitle { font-size: 3.6vw; }
+    
+    .paragraph6 {
+        width: 75%;
+        margin-bottom: 2vw;
+    }
+
+    .about {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2vw;
+    }
+
+    #lastupdate{
+        margin-bottom: 2vw;
+        padding-bottom: 10vw;
+    }
+    
+    .paragraph6 a, .desc-title { font-size: 2.4vw; }
+    .paragraph6 a { font-size: 2.4vw; }
     
     #footer { display: none; }
+
+    #mobile-menu a {
+        font-size: 3.6vw;
+    }
+
+    .toggle-track {
+        width: 5vw;
+        height: 2.8vw;
+        border-width: 1.75px;
+    }
+
+    .toggle-knob {
+        left: 0.35vw;
+        width: 2.2vw;
+        height: 2.2vw;
+    }
+
+    .credits{
+        font-size: 2.4vw;
+        padding-bottom: 10vw;
+    }
 }
 
 @media (max-width: 600px) {
     #header { height: 32vw; }
     .logo { height: 20vw; }
-    #sb-container { padding-bottom: 20vw; }
+    #sb-container { padding-bottom: 10vw; }
     #content { padding-top: 32vw; grid-gap: 3.6vw; }
     
     #gallery-mobile { gap: 3.6vw; }
     .project-row { flex-direction: column; }
-    .image-container, .project-infos { width: 95%; }
+    
+    .image-container, .project-infos, .video-container, .img-dual { 
+        width: 95%; 
+    }
     
     .project-infos a { font-size: 3.6vw; }
     .paragraph .scheda-title { font-size: 6vw; }
+    .paragraph .scheda-subtitle { font-size: 4.2vw; }
     
     .nav-content span { margin: 0 2vw; }
     .broccoli { font-size: 8vw; }
@@ -393,5 +539,37 @@ a {
         left: 0.65vw;
         width: 4.4vw;
         height: 4.4vw;
+    }
+
+    .paragraph6 {
+        width: 95%;
+        margin-bottom: 2vw;
+    }
+    
+    .paragraph6 a, .desc-title { font-size: 3.6vw; }
+
+    .img-dual {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 3.6vw;
+    }
+    
+    .credits {
+        width: 100%;
+        margin-bottom: 3.6vw;
+        margin-top: 3vw;
+        font-size: 3.6vw;
+        padding-bottom: 10vw;
+    }
+
+    #lastupdate{
+        margin-bottom: 0vw;
+        padding-bottom: 10vw;
+    }
+    
+    #st-container { font-size: 6vw; }
+    #ss-container { font-size: 4.2vw; }
+
+    #mobile-menu a {
+        font-size: 6vw;
     }
 }
