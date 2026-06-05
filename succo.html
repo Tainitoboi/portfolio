@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+    const initialTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    if (initialTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <title>Tainito - Succo</title>
 
@@ -11,6 +20,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div>
@@ -19,9 +30,21 @@
         <img src="assets/cross.png" class="cross-element" id="cross-3">
         <img src="assets/cross.png" class="cross-element" id="cross-4">
     </div>
+    
     <div id="header">
-         <img class="logo" src="assets/tainito_logo.png">
+         <img class="logo" id="loghino" src="assets/tainito_logo.png">
     </div>
+
+    <div id="mobile-menu">
+        <a href="index.html">Projects</a>
+        <a href="about.html">About</a>
+        <div class="theme-toggle" id="theme-toggle-mobile">
+            <div class="toggle-track">
+                <div class="toggle-knob"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="col12" id="content">
         <div class="paragraph">
             <div id="st-container"><a class="scheda-title">SUCCO</a></div>
@@ -39,501 +62,36 @@
             <a>Succo is a website created from the desire to discover and shed light on the daily problems affecting the various campuses of the Politecnico di Milano. With a colorful and playful mood, the homonymous mascot gives the students more information and solutions about these issues. Through the Instagram stories students can monitor what’s happening in the campus' spaces and report the problems they find putting stickers around the university. Visit the </a><a href="https://succo.altervista.org/" class="link" target="_blank">website</a><a> and the </a><a href="https://www.instagram.com/succo.real/" class="link" target="_blank">ig profile</a><a>.</a>
         </div>
         <div class="image-container">
-            <img src="projects/succo/succo_banner.png">
+            <img src="assets/projects/succo/succo_banner.png">
         </div>
         <div class="img-dual">
-            <img src="projects/succo/succo_ig_crop.png">
-            <img src="projects/succo/succo_mockups.jpg">
+            <img src="assets/projects/succo/succo_ig_crop.png">
+            <img src="assets/projects/succo/succo_mockups.jpg">
         </div>
         <div class="credits">
             <a>Created with: E. Bailetti, G. Basile, F. Iannicelli, F. Signorile, D. Vitrano.</a>
         </div>
     </div>
+
     <div id="footer">
         <div class="column-navbar">
             <div class="nav-content">
-                <a href="index.html" id="btn-info" class="tab-link active" onclick="toggleContent('info')">Projects</a>
+                <a href="index.html" id="btn-info" class="tab-link active">Projects</a>
                 <span id="sep-1" class="separator active"> • </span>
-                <a href="about.html" id="btn-class" class="tab-link nav-inactive" onclick="toggleContent('class')">About</a>
+                <a href="about.html" id="btn-class" class="tab-link nav-inactive">About</a>
             </div>
         </div>
         <div class="column-navbar">
             <div class="nav-content">
                 <a>© Tainito 2026.</a>
+                <div class="theme-toggle" id="theme-toggle">
+                    <div class="toggle-track">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
-
-<style>
-    body{
-        overflow-x: hidden;
-        margin: 0;
-    }
-
-    html{
-        scroll-behavior: smooth;
-    }
-
-    .cross-element{
-        position: fixed;
-        z-index: 9999;
-        pointer-events: none;
-        width: 3vw;
-    }
-
-    #cross-1{
-        top: 2vw;
-        left: 2vw;
-    }
-
-    #cross-2{
-        top: 2vw;
-        right: 2vw;
-    }
-
-    #cross-3{
-        top: 48vh;
-        left: 2vw;
-    }
-
-    #cross-4{
-        top: 48vh;
-        right: 2vw;
-    }
-
-    #header{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 8vw;
-
-        position: fixed;
-        top: 0;
-        left: 0;
-
-        z-index: 1000;
-
-        pointer-events: none;
-    }
-
-    .logo{
-        height: 5vw;
-        pointer-events: auto;
-    }
-
-    #footer{
-        width: 96vw;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 6vw;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 1000;
-        padding-left: 2vw;
-        padding-right: 2vw;
-
-        pointer-events: none;
-    }
-
-    #footer .nav-content,
-    #footer .nav-content a{
-        pointer-events: auto;
-    }
-
-    .nav-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: 'Sora', sans-serif;
-        font-weight: 400;
-        font-size: 1.2vw;
-    }
-
-    .nav-content a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .tab-link {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
-        text-decoration: none;
-        color: black;
-        display: inline-block;
-    }
-
-    .tab-link.active {
-        opacity: 1 !important;
-        font-style: underline;
-    }
-
-    .tab-link:hover {
-        transition: 0.1s ease;
-        color: white;
-        background: black;
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    .tab-link,
-    .separator {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        text-decoration: none;
-        color: black;
-        display: inline-block;
-    }
-
-    .separator.active {
-        opacity: 1 !important;
-    }
-
-    .nav-content span {
-        margin: 0 0.5vw;
-    }
-
-    .galimg {
-        object-fit: cover;
-        transition: filter 0.5s ease, opacity 0.5s ease;
-        width: 100%;
-    }
-    
-    .project-infos{
-            display: none;
-        }
-    
-    #st-container{
-        text-align: center;
-        font-size: 2vw;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    #ss-container{
-        text-align: center;
-        font-size: 1.2vw;
-    }
-
-    /* Griglia delle immagini */
-    #content {
-        display: flex;
-        grid-gap: 1vw;
-        width: 100%;
-        padding-top: 8vw; /* aggiungi questo */
-        flex-direction: column;
-        align-items: center;
-
-        font-family: 'Sora', sans-serif;
-        font-weight: 400;
-        font-size: 1.2vw;
-    }
-
-    .paragraph6{
-        width: 55%;
-        margin-bottom:1vw;
-        text-align: center;
-    }
-    
-    .paragraph6 a{
-        font-size: 1vw;
-        font-weight: 400;
-    }
-
-    .image-container {
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        cursor: pointer;
-        width: 55%;
-    }
-
-    .image-container img{
-        width: 100%;
-    }
-
-    .img-dual{
-        width: 55%;
-        margin-bottom:0vw;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 1vw;
-    }
-    
-    .img-dual img{
-        width: 100%;
-        object-fit: cover;
-        overflow: hidden;
-    }
-
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.4); /* Sfondo nero semitrasparente */
-        opacity: 0; /* Inizialmente invisibile */
-        transition: opacity 0.3s ease;
-    }
-
-    .overlay a {
-        color: white;
-        font-size: 1.2vw;
-        font-weight: bold;
-        text-align: center;
-        transform: scale(0.8); /* Inizia leggermente ridotto */
-        opacity: 1;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-
-    /* Effetti hover */
-    .image-container:hover .galimg {
-        filter: grayscale(100%);
-        opacity: 0.6;
-    }
-
-    .image-container:hover .overlay {
-        opacity: 1; /* Testo e sfondo appaiono in hover */
-    }
-    
-    .image-container:hover .overlay span {
-        transform: scale(1); /* Crescita del testo quando hoverato */
-        opacity: 1; /* Fa apparire gradualmente il testo */
-    }
-    
-    .video-container {
-        position: relative;
-        width: 55%;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        display: flex;
-    }
-
-    .video-container iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
-
-    .credits{
-        width: 55%;
-        padding-bottom: 2.3vw;
-        font-size: 1vw;
-        text-align: center;
-    }
-
-    .link{
-        color: black;
-        text-underline-offset: 0.15em;
-    }
-
-    .link:hover{
-        transition: 0.1s ease;
-        color: white;
-        background: black;
-    }
-
-    @media (max-width: 1024px){
-        .image-container{
-            flex-direction: column;
-        }
-        
-        .overlay{
-            display: none;
-        }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1vw;
-            margin-top:0.7vw;
-        }
-        
-        .project-infos a{
-            font-size: 1.8vw;
-            font-weight: 600;
-        }
-        
-        .project-name{
-            text-align: start;
-            width:70%;
-        }
-        
-        .project-date{
-            text-align: end;
-            width:30%;
-        }
-        
-        #gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 1.5vw;
-            width: 100%;
-            padding: 1.5vw;
-            margin:0;
-        }
-        
-        .contenuto{
-            width: 83.3%;
-        }
-        
-        .paragraph6 a{
-            font-size: 1.2vw;
-        }
-        
-        .image-container:hover .galimg {
-            filter: grayscale(0%);
-            opacity: 1;
-        }
-    }
-    
-    @media (max-width: 600px){
-        .cross-element{
-            display: none;
-        }
-
-        #header{
-            height: 32vw;
-        }
-
-        .logo{
-            height: 20vw;
-        }
-
-        #content{
-            padding-top: 32vw;
-            grid-gap: 3.6vw;
-        }
-
-        #gallery {
-            grid-template-columns: repeat(1, 1fr);
-            width: 100%;
-            margin: 0vw;
-            padding:0;
-            gap:3.6vw;
-        }
-        
-        .project-infos a{
-            font-size: 3.6vw;
-        }
-
-        .contenuto{
-            width: 100%;
-            padding: 4vw;
-            gap:3.6vw;
-            padding-top: 2vw;
-        }
-
-        .desc-title{
-            font-size: 3.6vw;
-        }
-
-        .paragraph6{
-            width: 95%;
-            margin-bottom:2vw;
-        }
-        
-        .paragraph6 a{
-            font-size: 3.6vw;
-        }
-        
-        .paragraph .title{
-            font-size: 4vw;
-        }
-        
-        .paragraph .scheda-title{
-            font-size:6vw;
-        }
-        
-        .paragraph .scheda-subtitle{
-            font-size:4.2vw;
-        }
-        
-        .credits{
-            width:100%;
-            margin-bottom:3.6vw;
-            margin-top:3vw;
-        }
-        
-        .credits a{
-            font-size: 3.6vw;
-        }
-
-        .video-container{
-            width: 95%;
-        }
-
-        .image-container{
-            width: 95%;
-        }
-        
-        .img-dual{
-            grid-gap: 3.6vw;
-            grid-template-columns: repeat(1, 1fr);
-            width: 95%;
-        }
-        
-        .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
-            padding: 0px;
-        }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1.5vw;
-            margin-top:1.5vw;
-        }
-    }
-</style>
-
-<script>
-    // Click sulle immagini
-    document.querySelectorAll('.image-container').forEach(container => {
-        container.addEventListener('click', function() {
-            const url = this.getAttribute('data-url');
-
-            if (url) {
-                window.location.href = url;
-            }
-        });
-    });
-
-    // Footer navigation
-    function toggleContent(section) {
-
-        // Reset di tutti i link
-        document.querySelectorAll('.tab-link').forEach(link => {
-            link.classList.remove('active');
-        });
-
-        // Reset separatori
-        document.querySelectorAll('.separator').forEach(sep => {
-            sep.classList.remove('active');
-        });
-
-        // Attiva Projects
-        if(section === 'info'){
-            document.getElementById('btn-info').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'projects.html';
-        }
-
-        // Attiva About
-        if(section === 'class'){
-            document.getElementById('btn-class').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'about.html';
-        }
-    }
-</script>
+<script src="script.js"></script>
 </html>
