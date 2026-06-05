@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+    const initialTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    if (initialTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <title>Tainito - About</title>
 
@@ -11,6 +20,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div>
@@ -19,9 +30,21 @@
         <img src="assets/cross.png" class="cross-element" id="cross-3">
         <img src="assets/cross.png" class="cross-element" id="cross-4">
     </div>
+    
     <div id="header">
-         <img class="logo" src="assets/tainito_logo.png">
+         <img class="logo" id="loghino" src="assets/tainito_logo.png">
     </div>
+
+    <div id="mobile-menu">
+        <a href="index.html">Projects</a>
+        <a href="about.html">About</a>
+        <div class="theme-toggle" id="theme-toggle-mobile">
+            <div class="toggle-track">
+                <div class="toggle-knob"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="col12" id="content">
         <div class="paragraph">
             <div id="sp-container"><a class="scheda-title">something about me 👇🏻</a></div>
@@ -47,553 +70,53 @@
             </div>
         </div>
         <div class="col12" id="gallery-mobile">
-            <div class="paragraph6">
+            <div class="paragraph6 about">
                 <a>I am a visual and communication designer with a long-standing fascination for everything that fuels my imagination, including video games and animated content. Over the years, through passion and experience, I have developed projects that strongly reflect my style and personality.</a>
             </div>
-            <div class="paragraph6">
+            <div class="paragraph6 about">
                 <p class="desc-title">EXPERIENCE</p>
                 <a id="par6-1-desktop">Video Editor and 3D Artist,<br>Freelancer (2018-On going)</a>
                 <a id="par6-1-desktop">Graphic and Communication Designer,<br>MOVE.EXE 1.0 - 2.0 (2022-2023)</a>
                 <a id="par6-1-desktop">Exhibition and Experience Designer,<br>Anthropogenic Narratives (2023)</a>
             </div>
-            <div class="paragraph6">
+            <div class="paragraph6 about">
                 <p class="desc-title">EDUCATION</p>
                 <a>BA Communication Design,<br>Politecnico di Milano (2020-2023)</a>
                 <a>MA Communication Design,<br>Politecnico di Milano (2023-2026)</a>
                 <a>Erasmus Experience,<br>University of Lapland (2025)</a>
             </div>
-            <div class="paragraph6">
+            <div class="paragraph6 about">
                 <p class="desc-title">CONTACT</p>
                 <div><a>E-mail: </a><a href="mailto:taino934@gmail.com" class="link">taino934@gmail.com</a></div>
                 <div><a>Instagram: </a><a href="https://www.instagram.com/tainitostuff/" target="_blank" class="link">@tainitostuff</a></div>
                 <div><a>Linkedin: </a><a href="https://www.linkedin.com/in/marcotaino/" target="_blank" class="link">/marcotaino</a></div>
                 <div><a>CV: </a><a href="https://tainito.altervista.org/wp-content/uploads/2026/01/MarcoTaino_Resume.pdf" target="_blank" class="link">view</a></div>
             </div>
-            <div class="paragraph6">
+            <div class="paragraph6 about" id="lastupdate">
                 <a><i>Last update: May 2026.</i></a>
             </div>
         </div>
     </div>
+    
     <div id="footer">
         <div class="column-navbar">
             <div class="nav-content">
-                <a href="index.html" id="btn-info" class="tab-link active" onclick="toggleContent('info')">Projects</a>
+                <a href="index.html" id="btn-info" class="tab-link nav-inactive">Projects</a>
                 <span id="sep-1" class="separator active"> • </span>
-                <a href="about.html" id="btn-class" class="tab-link nav-inactive" onclick="toggleContent('class')">About</a>
+                <a href="about.html" id="btn-class" class="tab-link active">About</a>
             </div>
         </div>
         <div class="column-navbar">
             <div class="nav-content">
                 <a>© Tainito 2026.</a>
+                <div class="theme-toggle" id="theme-toggle">
+                    <div class="toggle-track">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
-
-<style>
-    body{
-        overflow-x: hidden;
-        margin: 0;
-    }
-
-    html{
-        scroll-behavior: smooth;
-    }
-
-    .cross-element{
-        position: fixed;
-        z-index: 9999;
-        pointer-events: none;
-        width: 3vw;
-    }
-
-    #cross-1{
-        top: 2vw;
-        left: 2vw;
-    }
-
-    #cross-2{
-        top: 2vw;
-        right: 2vw;
-    }
-
-    #cross-3{
-        top: 48vh;
-        left: 2vw;
-    }
-
-    #cross-4{
-        top: 48vh;
-        right: 2vw;
-    }
-
-    #header{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 8vw;
-
-        position: fixed;
-        top: 0;
-        left: 0;
-
-        z-index: 1000;
-
-        pointer-events: none;
-    }
-
-    #sp-container{
-        text-align: center;
-        font-size: 1.2vw;
-        padding-top: 0.6vw;
-        padding-bottom: 0.4vw;
-    }
-
-    #sb-container{
-        text-align: center;
-        font-size: 1.2vw;
-        padding-top: 0.6vw;
-        padding-bottom: 2.3vw;
-    }
-
-    .logo{
-        height: 5vw;
-        pointer-events: auto;
-    }
-
-    #footer{
-        width: 96vw;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 6vw;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 1000;
-        padding-left: 2vw;
-        padding-right: 2vw;
-
-        pointer-events: none;
-    }
-
-    #footer .nav-content,
-    #footer .nav-content a{
-        pointer-events: auto;
-    }
-
-    .nav-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: 'Sora', sans-serif;
-        font-weight: 400;
-        font-size: 1.2vw;
-    }
-
-    .nav-content a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .tab-link {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
-        text-decoration: none;
-        color: black;
-        display: inline-block;
-    }
-
-    .tab-link.active {
-        opacity: 1 !important;
-        font-style: underline;
-    }
-
-    .tab-link:hover {
-        transition: 0.1s ease;
-        color: white;
-        background: black;
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    .tab-link,
-    .separator {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        text-decoration: none;
-        color: black;
-        display: inline-block;
-    }
-
-    .separator.active {
-        opacity: 1 !important;
-    }
-
-    .nav-content span {
-        margin: 0 0.5vw;
-    }
-
-    .galimg {
-        object-fit: cover;
-        transition: filter 0.5s ease, opacity 0.5s ease;
-        width: 100%;
-    }
-    
-    .project-infos{
-        display: none;
-    }
-
-    #content {
-        display: flex;
-        grid-gap: 1vw;
-        width: 100%;
-        padding-top: 8vw; /* aggiungi questo */
-        flex-direction: column;
-        align-items: center;
-
-        font-family: 'Sora', sans-serif;
-        font-weight: 400;
-        font-size: 1.2vw;
-    }
-
-    .paragraph6{
-        width: 55%;
-        margin-bottom:1vw;
-        text-align: center;
-    }
-    
-    .paragraph6 a{
-        font-size: 1vw;
-        font-weight: 400;
-    }
-
-    .desc-title{
-        font-weight: 600;
-        margin-top: 0;
-        margin-bottom: 0.4vw;
-        text-transform: uppercase;
-        font-size: 1vw;
-    }
-
-    /* Griglia delle immagini */
-    #gallery {
-        display: flex;
-        grid-gap: 1vw;
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #gallery-mobile {
-        display: none;
-        grid-gap: 1vw;
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .image-container {
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        cursor: pointer;
-        width: 55%;
-    }
-
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.4); /* Sfondo nero semitrasparente */
-        opacity: 0; /* Inizialmente invisibile */
-        transition: opacity 0.3s ease;
-    }
-
-    .overlay a {
-        color: white;
-        font-size: 1.2vw;
-        font-weight: bold;
-        text-align: center;
-        transform: scale(0.8); /* Inizia leggermente ridotto */
-        opacity: 1;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-
-    /* Effetti hover */
-    .image-container:hover .galimg {
-        filter: grayscale(100%);
-        opacity: 0.6;
-    }
-
-    .image-container:hover .overlay {
-        opacity: 1; /* Testo e sfondo appaiono in hover */
-    }
-    
-    .image-container:hover .overlay span {
-        transform: scale(1); /* Crescita del testo quando hoverato */
-        opacity: 1; /* Fa apparire gradualmente il testo */
-    }
-
-    .link{
-        color: black;
-        text-underline-offset: 0.15em;
-    }
-
-    .link:hover{
-        transition: 0.1s ease;
-        color: white;
-        background: black;
-    }
-    
-    @media (max-width: 1024px){
-        .cross-element{
-            display: none;
-        }
-
-        #header{
-            height: 20vw;
-        }
-
-        .logo{
-            height: 12vw;
-        }
-
-        #content{
-            padding-top: 20vw;
-            grid-gap: 2.4vw
-        }
-
-        #gallery {
-            display: none;
-        }
-
-        #gallery-mobile {
-            display: flex;
-            grid-template-columns: repeat(1, 1fr);
-            width: 100%;
-            margin: 0vw;
-            padding:0;
-            gap:2.4vw;
-        }
-        
-        .project-infos a{
-            font-size: 2.4vw;
-        }
-
-        .contenuto{
-            width: 100%;
-            padding: 4vw;
-            gap:2.4vw;
-            padding-top: 2vw;
-        }
-
-        .desc-title{
-            font-size: 2.4vw;
-        }
-
-        .paragraph6{
-            width: 75%;
-            margin-bottom:2vw;
-            display: flex;
-            flex-direction: column;
-            row-gap: 2vw;
-        }
-        
-        .paragraph6 a{
-            font-size: 2.4vw;
-        }
-        
-        .paragraph .title{
-            font-size: 3vw;
-        }
-        
-        .paragraph .scheda-title{
-            font-size:3vw;
-        }
-        
-        .paragraph .scheda-subtitle{
-            font-size:3vw;
-        }
-        
-        .credits{
-            width:100%;
-            margin-bottom:3.6vw;
-            margin-top:3vw;
-        }
-        
-        .credits a{
-            font-size: 3.6vw;
-        }
-        
-        .img-dual{
-            grid-template-columns: repeat(1, 1fr);
-        }
-        
-        .img-dual{
-            grid-gap: 3.6vw;
-        }
-        
-        .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
-            padding: 0px;
-        }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1.5vw;
-            margin-top:1.5vw;
-        }
-    }
-    
-    @media (max-width: 600px){
-        .cross-element{
-            display: none;
-        }
-
-        #header{
-            height: 32vw;
-        }
-
-        .logo{
-            height: 20vw;
-        }
-
-        #content{
-            padding-top: 32vw;
-            grid-gap: 3.6vw
-        }
-
-        #gallery {
-            display: none;
-        }
-
-        #gallery-mobile {
-            display: flex;
-            grid-template-columns: repeat(1, 1fr);
-            width: 100%;
-            margin: 0vw;
-            padding:0;
-            gap:3.6vw;
-        }
-        
-        .project-infos a{
-            font-size: 3.6vw;
-        }
-
-        .contenuto{
-            width: 100%;
-            padding: 4vw;
-            gap:3.6vw;
-            padding-top: 2vw;
-        }
-
-        .desc-title{
-            font-size: 3.6vw;
-        }
-
-        .paragraph6{
-            width: 95%;
-            margin-bottom:2vw;
-            display: flex;
-            flex-direction: column;
-            row-gap: 2vw;
-        }
-        
-        .paragraph6 a{
-            font-size: 3.6vw;
-        }
-        
-        .paragraph .title{
-            font-size: 4vw;
-        }
-        
-        .paragraph .scheda-title{
-            font-size:6vw;
-        }
-        
-        .paragraph .scheda-subtitle{
-            font-size:4.2vw;
-        }
-        
-        .credits{
-            width:100%;
-            margin-bottom:3.6vw;
-            margin-top:3vw;
-        }
-        
-        .credits a{
-            font-size: 3.6vw;
-        }
-        
-        .img-dual{
-            grid-template-columns: repeat(1, 1fr);
-        }
-        
-        .img-dual{
-            grid-gap: 3.6vw;
-        }
-        
-        .elementor-column-gap-default>.elementor-column>.elementor-element-populated {
-            padding: 0px;
-        }
-        
-        .project-infos{
-            display: flex;
-            margin-bottom:1.5vw;
-            margin-top:1.5vw;
-        }
-    }
-</style>
-
-<script>
-    // Click sulle immagini
-    document.querySelectorAll('.image-container').forEach(container => {
-        container.addEventListener('click', function() {
-            const url = this.getAttribute('data-url');
-
-            if (url) {
-                window.location.href = url;
-            }
-        });
-    });
-
-    // Footer navigation
-    function toggleContent(section) {
-
-        // Reset di tutti i link
-        document.querySelectorAll('.tab-link').forEach(link => {
-            link.classList.remove('active');
-        });
-
-        // Reset separatori
-        document.querySelectorAll('.separator').forEach(sep => {
-            sep.classList.remove('active');
-        });
-
-        // Attiva Projects
-        if(section === 'info'){
-            document.getElementById('btn-info').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'projects.html';
-        }
-
-        // Attiva About
-        if(section === 'class'){
-            document.getElementById('btn-class').classList.add('active');
-            document.getElementById('sep-1').classList.add('active');
-
-            // esempio redirect
-            // window.location.href = 'about.html';
-        }
-    }
-</script>
+<script src="script.js"></script>
 </html>
