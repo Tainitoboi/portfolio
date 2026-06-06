@@ -596,59 +596,70 @@ a {
     }
 }
 
-/* Nasconde il cursore standard su desktop (dagli iPad Pro in su) */
+/* ==========================================================================
+   GESTIONE CURSORE PERSONALIZZATO (Solo Desktop)
+   ========================================================================== */
 @media (min-width: 1025px) {
+    /* 1. Nasconde il cursore standard */
     html, body, a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli {
-        cursor: none !important; /* Disabilita la freccia standard */
+        cursor: none !important;
     }
     
-    /* Il contenitore fisico del cursore personalizzato */
+    /* 2. Stato Default */
     #custom-cursor {
         width: 16px;
         height: 16px;
+        background-color: var(--text-color);
+        border: 2px solid transparent;
+        border-radius: 50%;
         position: fixed;
         top: 0;
         left: 0;
-        border-radius: 50%;
-        pointer-events: none; /* Non interferisce con i click sugli elementi sottostanti */
+        pointer-events: none;
         z-index: 10000;
         
-        /* Centra il cerchio sul punto esatto del mouse per un puntamento preciso */
-        transform: translate3d(-50%, -50%, 0);
-        will-change: transform;
+        opacity: 1;
+        visibility: visible;
+        transform: translate3d(-50%, -50%, 0) scale(1);
+        will-change: transform, opacity;
         
-        /* === Stato di default: Cerchio pieno del colore del testo attuale === */
-        background-color: var(--text-color);
-        /* Aggiungiamo un bordo trasparente di default per mantenere le stesse dimensioni tra i due stati */
-        border: 2px solid transparent; 
-        
-        /* Transizioni fluide per dimensioni, bordo e colori (per Dark Mode) */
+        /* MODIFICATO: Rimosso "all". Ora la transizione si applica SOLO a dimensioni, 
+           colori e opacità, escludendo il movimento transform per una reattività immediata */
         transition: 
-            width 0.2s ease, 
-            height 0.2s ease, 
+            width 0.2s ease-out, 
+            height 0.2s ease-out, 
             background-color 0.3s ease, 
-            border-color 0.3s ease;
+            border-color 0.3s ease,
+            opacity 0s ease-out,
+            visibility 0s ease-out;
     }
 
-    /* === Stato di HOVER: Cerchio vuoto con bordo (Attivato da JS) === */
+    /* 3. Stato HOVER (Sui link e galleria index) */
     html.cursor-hover #custom-cursor {
-        width: 24px;
-        height: 24px;
-        
-        /* Interno del cerchio vuoto (colore dello sfondo attuale) */
+        width: 28px;
+        height: 28px;
         background-color: var(--bg-color) !important;
-        
-        /* Bordo del cerchio visibile (colore del testo attuale, quindi nero su light mode) */
         border-color: var(--text-color) !important;
+        transform: translate3d(-50%, -50%, 0) scale(1);
     }
 
+    /* 4. Stato FUORI FINESTRA */
     html.cursor-hidden #custom-cursor {
         opacity: 0;
         visibility: hidden;
-        transform: translate3d(-50%, -50%, 0) scale(0); /* Lo rimpicciolisce anche per evitare glitch visivi */
+        /* Rimosso scale(0) da qui per evitare che la transizione ritardi la scomparsa */
     }
 
-    .video-overlay {
-        cursor: none !important;
+    /* 5. Stato SOPRA AI VIDEO */
+    html.cursor-video #custom-cursor {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Ripristino cursore di sistema sopra il video */
+    .video-container, 
+    .video-container iframe, 
+    .video-container .video-overlay {
+        cursor: auto !important;
     }
 }
