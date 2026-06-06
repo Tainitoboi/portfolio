@@ -297,19 +297,25 @@ crosses.forEach(cross => {
 });
 
 /* ==========================================================================
-   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Compatibile YT e Vimeo)
+   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Aggiornata per YouTube)
    ========================================================================== */
 document.querySelectorAll('.video-container').forEach(container => {
     const overlay = container.querySelector('.video-overlay');
     
-    overlay?.addEventListener('mousedown', (e) => {
-        // 1. Sposta l'overlay dietro al video istantaneamente (z-index inferiore all'iframe)
+    overlay?.addEventListener('click', () => {
+        // Disabilitiamo temporaneamente i pointer-events sull'overlay
+        overlay.style.pointerEvents = 'none';
+        
+        // Lo mandiamo visivamente sullo sfondo per non interferire con l'iframe
         overlay.style.zIndex = '1';
         
-        // 2. Crea un brevissimo delay per dare il tempo al browser di registrare il click reale
-        setTimeout(() => {
-            // 3. Ripristina l'overlay sopra al video
+        // Lasciamo l'overlay dietro finché l'utente non sposta il mouse fuori dal video container
+        // In questo modo può interagire liberamente con tutti i comandi di YouTube (Pausa, Volume, Timeline)
+        container.addEventListener('mouseleave', function resetOverlay() {
+            overlay.style.pointerEvents = 'auto';
             overlay.style.zIndex = '10';
-        }, 200);
+            // Rimuove questo listener temporaneo per non accumularne altri al prossimo click
+            container.removeEventListener('mouseleave', resetOverlay);
+        });
     });
 });
