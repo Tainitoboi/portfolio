@@ -7,6 +7,7 @@ const mobileMenu = document.getElementById("mobile-menu");
 const themeToggle = document.getElementById("theme-toggle");
 const themeToggleMobile = document.getElementById("theme-toggle-mobile");
 const crosses = document.querySelectorAll(".cross-element");
+const customCursor = document.getElementById("custom-cursor");
 
 let activeFilter = null;
 const filters = {
@@ -15,6 +16,10 @@ const filters = {
     "cross-3": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(10) hue-rotate(280deg)",
     "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"
 };
+
+// Coordinate per il tracciamento del cursore personalizzato
+let mouseX = -100;
+let mouseY = -100;
 
 /* ==========================================================================
    2. GESTIONE SCROLL
@@ -28,7 +33,7 @@ window.addEventListener('load', () => {
 });
 
 /* ==========================================================================
-   3. FUNZIONI LOGICHE DEL TEMA (Istantaneo e ultra leggero)
+   3. FUNZIONI LOGICHE DEL TEMA (Istantaneo e sincronizzato)
    ========================================================================== */
 function applyTheme(isDark) {
     if (isDark) {
@@ -37,7 +42,7 @@ function applyTheme(isDark) {
         html.removeAttribute("data-theme");
     }
 
-    // Sincronizzazione dinamica dei meta tag della barra del browser mobile
+    // Sincronizzazione dei meta tag della scheda del browser
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
         themeColorMeta.setAttribute("content", isDark ? "#000000" : "#ffffff");
@@ -49,17 +54,23 @@ function applyTheme(isDark) {
     }
 
     localStorage.setItem("theme", isDark ? "dark" : "light");
-}
 
-function toggleTheme() {
-    const isDark = html.getAttribute("data-theme") !== "dark";
-    applyTheme(isDark);
+    /* AGGIUNTA: Manutenzione del cursore al cambio tema. 
+       Se il cursore è in hover, "smontiamo" e "rimontiamo" l'hover 
+       per forzare l'applicazione istantanea dei nuovi colori CSS 
+       (bg-color e text-color invertiti). */
+    if (html.classList.contains("cursor-hover")) {
+        html.classList.remove("cursor-hover");
+        // Piccolo delay per dare il tempo al browser di elaborare il cambio tema CSS
+        requestAnimationFrame(() => {
+            html.classList.add("cursor-hover");
+        });
+    }
 }
 
 /* ==========================================================================
    4. INTERAZIONI DI NAVIGAZIONE E INTERFACCIA
    ========================================================================== */
-// Click sulle immagini per andare alla scheda progetto (Attivo sulle gallerie)
 document.querySelectorAll('.image-container').forEach(container => {
     container.addEventListener('click', function() {
         const url = this.dataset.url;
@@ -67,7 +78,6 @@ document.querySelectorAll('.image-container').forEach(container => {
     });
 });
 
-// Chiude il menu mobile se clicchi sullo sfondo (escludendo i link e il toggle)
 mobileMenu?.addEventListener("click", (e) => {
     if (e.target.tagName === 'A' || e.target.closest('.theme-toggle')) {
         return;
@@ -76,7 +86,6 @@ mobileMenu?.addEventListener("click", (e) => {
     document.body.classList.remove("no-scroll");
 });
 
-// Chiude il menu mobile quando premi direttamente i link interni di navigazione
 document.querySelectorAll("#mobile-menu a").forEach(link => {
     link.addEventListener("click", () => {
         mobileMenu.classList.remove("open");
@@ -85,27 +94,150 @@ document.querySelectorAll("#mobile-menu a").forEach(link => {
 });
 
 /* ==========================================================================
-   5. LOGICA DI SPAWN DEI BROCCOLI (Manuale e Automatica)
+   5. GESTIONE CURSORE PERSONALIZZATO (Desktop)
    ========================================================================== */
+if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
+    // Aggiorna le coordinate reali del mouse al movimento
+    window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // Nasconde il cursore quando esce dalla finestra del browser
+    document.addEventListener("mouseleave", () => {
+        html.classList.add("cursor-hidden");
+    });
+
+    // Fa riapparire il cursore quando rientra nella finestra del browser
+    document.addEventListener("mouseenter", () => {
+        html.classList.remove("cursor-hidden");
+    });
+
+    // MODIFICATO: Ora bersaglia solo i link reali (.link), i pulsanti del footer (.tab-link), 
+    // i link del menu mobile (#mobile-menu a) e le altre categorie interattive.
+    const hoverTargets = '.link, .tab-link, #mobile-menu a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli';
+    
+    document.addEventListener("mouseover", (e) => {
+        if (e.target.closest(hoverTargets)) {
+            html.classList.add("cursor-hover");
+        }
+    });
+
+    document.addEventListener("mouseout", (e) => {
+        if (!e.relatedTarget || !e.relatedTarget.closest(hoverTargets)) {
+            html.classList.remove("cursor-hidden"); // mantiene la pulizia all'uscita
+            html.classList.remove("cursor-hover");
+        }
+    });
+}
+
+/* ==========================================================================
+   6. LOGICA DI SPAWN E FISICA DEI BROCCOLI (Massa e Pesantezza ravvicinata)
+   ========================================================================== */
+const activeBroccoliList = [];
+
 function spawnBroccoli() {
     const broccoli = document.createElement("div");
     broccoli.className = "broccoli";
     broccoli.textContent = "🥦";
     
-    // Calcolo coordinate e rotazioni randomiche ad ogni esecuzione
-    broccoli.style.left = Math.random() * window.innerWidth + "px";
-    broccoli.style.top = Math.random() * window.innerHeight + "px";
-    broccoli.style.transform = `rotate(${Math.random() * 360}deg)`;
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const rotation = Math.random() * 360;
 
-    // Se un filtro delle croci è attivo, viene ereditato anche dal nuovo broccolo
+    broccoli.style.left = x + "px";
+    broccoli.style.top = y + "px";
+    broccoli.style.transform = `rotate(${rotation}deg)`;
+
     if (activeFilter) {
         broccoli.style.filter = activeFilter;
     }
 
     document.body.appendChild(broccoli);
+
+    const broccoliData = {
+        element: broccoli,
+        x: x,
+        y: y,
+        vx: 0,
+        vy: 0,
+        rotation: rotation,
+        vRot: 0
+    };
+
+    broccoli.addEventListener("mouseenter", (e) => {
+        const rect = broccoli.getBoundingClientRect();
+        const broccoliCenterX = rect.left + rect.width / 2;
+        const broccoliCenterY = rect.top + rect.height / 2;
+
+        let dx = broccoliCenterX - e.clientX;
+        let dy = broccoliCenterY - e.clientY;
+
+        const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+        dx /= distance;
+        dy /= distance;
+
+        const force = 3; 
+
+        broccoliData.vx = dx * force;
+        broccoliData.vy = dy * force;
+        broccoliData.vRot = (Math.random() - 0.5) * 4;
+    });
+
+    activeBroccoliList.push(broccoliData);
 }
 
-// Click sul logo: Apre il menu mobile (<1024px) o fa spawnare un singolo broccolo su desktop
+// MOTORE GLOBALE DI ANIMAZIONE (Fisica + Cursore integrati a 60fps)
+function globalAnimationLoop() {
+    // 1. Spostamento fluido del cursore personalizzato
+    if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
+        customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+    }
+
+    // 2. Calcolo della fisica dei broccoli
+    const friction = 0.94; 
+
+    for (let i = activeBroccoliList.length - 1; i >= 0; i--) {
+        const b = activeBroccoliList[i];
+
+        if (Math.abs(b.vx) > 0.01 || Math.abs(b.vy) > 0.01 || Math.abs(b.vRot) > 0.01) {
+            b.x += b.vx;
+            b.y += b.vy;
+            b.rotation += b.vRot;
+
+            b.vx *= friction;
+            b.vy *= friction;
+            b.vRot *= friction;
+
+            if (b.x < 0) {
+                b.x = 0;
+                b.vx *= -0.3;
+            } else if (b.x > window.innerWidth - 40) {
+                b.x = window.innerWidth - 40;
+                b.vx *= -0.3;
+            }
+
+            if (b.y < 0) {
+                b.y = 0;
+                b.vy *= -0.3;
+            } else if (b.y > window.innerHeight - 40) {
+                b.y = window.innerHeight - 40;
+                b.vy *= -0.3;
+            }
+
+            b.element.style.left = b.x + "px";
+            b.element.style.top = b.y + "px";
+            b.element.style.transform = `rotate(${b.rotation}deg)`;
+        }
+    }
+
+    requestAnimationFrame(globalAnimationLoop);
+}
+
+// Avvio del motore grafico unificato
+requestAnimationFrame(globalAnimationLoop);
+
+// Gestione clic sul logo
 loghino?.addEventListener("click", () => {
     if (window.matchMedia("(max-width: 1024px)").matches) {
         mobileMenu?.classList.toggle("open");
@@ -115,7 +247,7 @@ loghino?.addEventListener("click", () => {
     spawnBroccoli();
 });
 
-// SPAWN AUTOMATICO: Genera un broccolo ogni 5000ms (5 secondi) solo se rilevato come Desktop (>1024px)
+// Spawn automatico ogni 5 secondi su desktop
 setInterval(() => {
     if (!window.matchMedia("(max-width: 1024px)").matches) {
         spawnBroccoli();
@@ -123,13 +255,11 @@ setInterval(() => {
 }, 5000);
 
 /* ==========================================================================
-   6. ASSEGNAZIONE EVENTI TOGGLE E INITIALIZATION
+   7. ASSEGNAZIONE EVENTI TOGGLE E INITIALIZATION
    ========================================================================== */
-// Aggancio definitivo dei trigger prima di inizializzare lo stato del tema
 themeToggle?.addEventListener("click", toggleTheme);
 themeToggleMobile?.addEventListener("click", toggleTheme);
 
-// Caricamento controllato del tema salvato all'avvio
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme) {
     applyTheme(savedTheme === "dark");
@@ -138,7 +268,6 @@ if (savedTheme) {
     applyTheme(prefersDark);
 }
 
-// Listener per captare il cambio di tema a livello di sistema operativo
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
     if (!localStorage.getItem("theme")) {
         applyTheme(e.matches);
@@ -146,11 +275,10 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e)
 });
 
 /* ==========================================================================
-   7. EASTER EGGS (Gestione filtri delle croci)
+   8. EASTER EGGS (Filtri delle croci)
    ========================================================================== */
 crosses.forEach(cross => {
     cross.addEventListener("click", () => {
-        // Se non ci sono broccoli a schermo, blocca l'operazione con avviso
         if (!document.querySelector(".broccoli")) {
             alert("Press the logo to unlock this function");
             return;
@@ -158,7 +286,6 @@ crosses.forEach(cross => {
 
         const clickedFilter = filters[cross.id];
 
-        // Se lo stesso filtro viene premuto due volte, si disattiva (Toggle off)
         if (activeFilter === clickedFilter) {
             activeFilter = null;
             document.querySelectorAll(".broccoli").forEach(broccoli => {
@@ -167,7 +294,6 @@ crosses.forEach(cross => {
             return;
         }
 
-        // Applicazione del nuovo filtro cromatico globale (Toggle on)
         activeFilter = clickedFilter;
         document.querySelectorAll(".broccoli").forEach(broccoli => {
             broccoli.style.filter = activeFilter;
