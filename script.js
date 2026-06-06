@@ -115,7 +115,7 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
 
     // MODIFICATO: Ora bersaglia solo i link reali (.link), i pulsanti del footer (.tab-link), 
     // i link del menu mobile (#mobile-menu a) e le altre categorie interattive.
-    const hoverTargets = '.link, .tab-link, #mobile-menu a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli';
+    const hoverTargets = '.link, .tab-link, #mobile-menu a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli, .video-overlay';
     
     document.addEventListener("mouseover", (e) => {
         if (e.target.closest(hoverTargets)) {
@@ -298,5 +298,34 @@ crosses.forEach(cross => {
         document.querySelectorAll(".broccoli").forEach(broccoli => {
             broccoli.style.filter = activeFilter;
         });
+    });
+});
+
+/* ==========================================================================
+   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER
+   ========================================================================== */
+document.querySelectorAll('.video-container').forEach(container => {
+    const overlay = container.querySelector('.video-overlay');
+    
+    overlay?.addEventListener('mousedown', (e) => {
+        // 1. Rende l'overlay temporaneamente "trasparente" ai click
+        overlay.style.pointerEvents = 'none';
+        
+        // 2. Trova l'elemento reale sotto il mouse (l'iframe di Vimeo) e simula il click
+        const iframe = container.querySelector('iframe');
+        if (iframe) {
+            // Genera un click virtuale nell'esatto punto del cursore
+            const clickEvent = new MouseEvent('click', {
+                clientX: e.clientX,
+                clientY: e.clientY,
+                bubbles: true
+            });
+            iframe.dispatchEvent(clickEvent);
+        }
+        
+        // 3. Ripristina istantaneamente l'overlay dopo 100ms per continuare a tracciare il cursore custom
+        setTimeout(() => {
+            overlay.style.pointerEvents = 'auto';
+        }, 100);
     });
 });
