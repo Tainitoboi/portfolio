@@ -21,6 +21,12 @@ const filters = {
 let mouseX = -100;
 let mouseY = -100;
 
+// DEFINIZIONE GLOBALE HOVER TARGETS (Spostata qui per evitare blocchi su mobile)
+let hoverTargets = '.link, .tab-link, #mobile-menu a, .video-overlay, .theme-toggle, .cross-element, .logo, .broccoli';
+if (document.getElementById('gallery') || document.getElementById('gallery-mobile')) {
+    hoverTargets += ', #gallery .image-container, #gallery-mobile .image-container';
+}
+
 /* ==========================================================================
    2. GESTIONE SCROLL
    ========================================================================== */
@@ -42,7 +48,6 @@ function applyTheme(isDark) {
         html.removeAttribute("data-theme");
     }
 
-    // Sincronizzazione dei meta tag della scheda del browser
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
         themeColorMeta.setAttribute("content", isDark ? "#000000" : "#ffffff");
@@ -55,17 +60,17 @@ function applyTheme(isDark) {
 
     localStorage.setItem("theme", isDark ? "dark" : "light");
 
-    /* AGGIUNTA: Manutenzione del cursore al cambio tema. 
-       Se il cursore è in hover, "smontiamo" e "rimontiamo" l'hover 
-       per forzare l'applicazione istantanea dei nuovi colori CSS 
-       (bg-color e text-color invertiti). */
     if (html.classList.contains("cursor-hover")) {
         html.classList.remove("cursor-hover");
-        // Piccolo delay per dare il tempo al browser di elaborare il cambio tema CSS
         requestAnimationFrame(() => {
             html.classList.add("cursor-hover");
         });
     }
+}
+
+function toggleTheme() {
+    const isDark = html.getAttribute("data-theme") !== "dark";
+    applyTheme(isDark);
 }
 
 /* ==========================================================================
@@ -94,28 +99,21 @@ document.querySelectorAll("#mobile-menu a").forEach(link => {
 });
 
 /* ==========================================================================
-   5. GESTIONE CURSORE PERSONALIZZATO (Desktop)
+   5. GESTIONE CURSORE PERSONALIZZATO (Solo Desktop)
    ========================================================================== */
 if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
-    // Aggiorna le coordinate reali del mouse al movimento
     window.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
     });
 
-    // Nasconde il cursore quando esce dalla finestra del browser
     document.addEventListener("mouseleave", () => {
         html.classList.add("cursor-hidden");
     });
 
-    // Fa riapparire il cursore quando rientra nella finestra del browser
     document.addEventListener("mouseenter", () => {
         html.classList.remove("cursor-hidden");
     });
-
-    // MODIFICATO: Ora bersaglia solo i link reali (.link), i pulsanti del footer (.tab-link), 
-    // i link del menu mobile (#mobile-menu a) e le altre categorie interattive.
-    const hoverTargets = '.link, .tab-link, #mobile-menu a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli, .video-overlay';
     
     document.addEventListener("mouseover", (e) => {
         if (e.target.closest(hoverTargets)) {
@@ -125,7 +123,7 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
 
     document.addEventListener("mouseout", (e) => {
         if (!e.relatedTarget || !e.relatedTarget.closest(hoverTargets)) {
-            html.classList.remove("cursor-hidden"); // mantiene la pulizia all'uscita
+            html.classList.remove("cursor-hidden");
             html.classList.remove("cursor-hover");
         }
     });
@@ -189,12 +187,10 @@ function spawnBroccoli() {
 
 // MOTORE GLOBALE DI ANIMAZIONE (Fisica + Cursore integrati a 60fps)
 function globalAnimationLoop() {
-    // 1. Spostamento fluido del cursore personalizzato
     if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
         customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
     }
 
-    // 2. Calcolo della fisica dei broccoli
     const friction = 0.94; 
 
     for (let i = activeBroccoliList.length - 1; i >= 0; i--) {
@@ -234,7 +230,6 @@ function globalAnimationLoop() {
     requestAnimationFrame(globalAnimationLoop);
 }
 
-// Avvio del motore grafico unificato
 requestAnimationFrame(globalAnimationLoop);
 
 // Gestione clic sul logo
@@ -308,13 +303,10 @@ document.querySelectorAll('.video-container').forEach(container => {
     const overlay = container.querySelector('.video-overlay');
     
     overlay?.addEventListener('mousedown', (e) => {
-        // 1. Rende l'overlay temporaneamente "trasparente" ai click
         overlay.style.pointerEvents = 'none';
         
-        // 2. Trova l'elemento reale sotto il mouse (l'iframe di Vimeo) e simula il click
         const iframe = container.querySelector('iframe');
         if (iframe) {
-            // Genera un click virtuale nell'esatto punto del cursore
             const clickEvent = new MouseEvent('click', {
                 clientX: e.clientX,
                 clientY: e.clientY,
@@ -323,7 +315,6 @@ document.querySelectorAll('.video-container').forEach(container => {
             iframe.dispatchEvent(clickEvent);
         }
         
-        // 3. Ripristina istantaneamente l'overlay dopo 100ms per continuare a tracciare il cursore custom
         setTimeout(() => {
             overlay.style.pointerEvents = 'auto';
         }, 100);
