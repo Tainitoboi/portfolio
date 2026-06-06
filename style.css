@@ -395,6 +395,16 @@ a {
     border: none;
 }
 
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* Sta sopra all'iframe */
+    background: transparent; /* Rimane invisibile */
+}
+
 .img-dual .pixelgif{
     width: 75%;
 }
@@ -636,5 +646,9 @@ a {
         opacity: 0;
         visibility: hidden;
         transform: translate3d(-50%, -50%, 0) scale(0); /* Lo rimpicciolisce anche per evitare glitch visivi */
+    }
+
+    .video-overlay {
+        cursor: none !important;
     }
 }
