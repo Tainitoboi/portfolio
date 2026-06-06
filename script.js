@@ -99,12 +99,14 @@ document.querySelectorAll("#mobile-menu a").forEach(link => {
 });
 
 /* ==========================================================================
-   5. GESTIONE CURSORE PERSONALIZZATO (Solo Desktop)
+   5. GESTIONE CURSORE PERSONALIZZATO (Solo Desktop - Movimento Istantaneo)
    ========================================================================== */
 if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
+    // MODIFICATO: Sposta il cursore ISTANTANEAMENTE nell'esatto momento in cui il mouse si muove
     window.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
+        customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
     });
 
     document.addEventListener("mouseleave", () => {
@@ -130,66 +132,13 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
 }
 
 /* ==========================================================================
-   6. LOGICA DI SPAWN E FISICA DEI BROCCOLI (Massa e Pesantezza ravvicinata)
+   6. LOGICA DI SPAWN E FISICA DEI BROCCOLI 
    ========================================================================== */
-const activeBroccoliList = [];
+// ... (tieni pure invariata la funzione spawnBroccoli() così com'è) ...
 
-function spawnBroccoli() {
-    const broccoli = document.createElement("div");
-    broccoli.className = "broccoli";
-    broccoli.textContent = "🥦";
-    
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
-    const rotation = Math.random() * 360;
-
-    broccoli.style.left = x + "px";
-    broccoli.style.top = y + "px";
-    broccoli.style.transform = `rotate(${rotation}deg)`;
-
-    if (activeFilter) {
-        broccoli.style.filter = activeFilter;
-    }
-
-    document.body.appendChild(broccoli);
-
-    const broccoliData = {
-        element: broccoli,
-        x: x,
-        y: y,
-        vx: 0,
-        vy: 0,
-        rotation: rotation,
-        vRot: 0
-    };
-
-    broccoli.addEventListener("mouseenter", (e) => {
-        const rect = broccoli.getBoundingClientRect();
-        const broccoliCenterX = rect.left + rect.width / 2;
-        const broccoliCenterY = rect.top + rect.height / 2;
-
-        let dx = broccoliCenterX - e.clientX;
-        let dy = broccoliCenterY - e.clientY;
-
-        const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-        dx /= distance;
-        dy /= distance;
-
-        const force = 3; 
-
-        broccoliData.vx = dx * force;
-        broccoliData.vy = dy * force;
-        broccoliData.vRot = (Math.random() - 0.5) * 4;
-    });
-
-    activeBroccoliList.push(broccoliData);
-}
-
-// MOTORE GLOBALE DI ANIMAZIONE (Fisica + Cursore integrati a 60fps)
+// MOTORE GLOBALE DI ANIMAZIONE (Ora calcola SOLO la fisica dei broccoli, lasciando stare il cursore)
 function globalAnimationLoop() {
-    if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
-        customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-    }
+    // RIMOSSO il blocco che muoveva il cursore qui dentro per togliere l'effetto smooth
 
     const friction = 0.94; 
 
@@ -229,8 +178,6 @@ function globalAnimationLoop() {
 
     requestAnimationFrame(globalAnimationLoop);
 }
-
-requestAnimationFrame(globalAnimationLoop);
 
 // Gestione clic sul logo
 loghino?.addEventListener("click", () => {
@@ -297,25 +244,23 @@ crosses.forEach(cross => {
 });
 
 /* ==========================================================================
-   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Aggiornata per YouTube)
+   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Ripristino cursore nativo)
    ========================================================================== */
 document.querySelectorAll('.video-container').forEach(container => {
     const overlay = container.querySelector('.video-overlay');
     
-    overlay?.addEventListener('click', () => {
-        // Disabilitiamo temporaneamente i pointer-events sull'overlay
-        overlay.style.pointerEvents = 'none';
-        
-        // Lo mandiamo visivamente sullo sfondo per non interferire con l'iframe
-        overlay.style.zIndex = '1';
-        
-        // Lasciamo l'overlay dietro finché l'utente non sposta il mouse fuori dal video container
-        // In questo modo può interagire liberamente con tutti i comandi di YouTube (Pausa, Volume, Timeline)
-        container.addEventListener('mouseleave', function resetOverlay() {
-            overlay.style.pointerEvents = 'auto';
-            overlay.style.zIndex = '10';
-            // Rimuove questo listener temporaneo per non accumularne altri al prossimo click
-            container.removeEventListener('mouseleave', resetOverlay);
-        });
+    // Rimuoviamo la necessità di bloccare i pointer-events sull'overlay per lasciare l'iframe libero
+    if (overlay) {
+        overlay.style.pointerEvents = 'none'; 
+    }
+
+    // Quando il mouse entra nel video, nascondiamo il cerchio nero custom
+    container.addEventListener('mouseenter', () => {
+        html.classList.add('cursor-video');
+    });
+    
+    // Quando il mouse esce dal video, facciamo tornare il cerchio nero custom
+    container.addEventListener('mouseleave', () => {
+        html.classList.remove('cursor-video');
     });
 });
