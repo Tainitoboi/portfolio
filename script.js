@@ -297,26 +297,19 @@ crosses.forEach(cross => {
 });
 
 /* ==========================================================================
-   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER
+   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Compatibile YT e Vimeo)
    ========================================================================== */
 document.querySelectorAll('.video-container').forEach(container => {
     const overlay = container.querySelector('.video-overlay');
     
     overlay?.addEventListener('mousedown', (e) => {
-        overlay.style.pointerEvents = 'none';
+        // 1. Sposta l'overlay dietro al video istantaneamente (z-index inferiore all'iframe)
+        overlay.style.zIndex = '1';
         
-        const iframe = container.querySelector('iframe');
-        if (iframe) {
-            const clickEvent = new MouseEvent('click', {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                bubbles: true
-            });
-            iframe.dispatchEvent(clickEvent);
-        }
-        
+        // 2. Crea un brevissimo delay per dare il tempo al browser di registrare il click reale
         setTimeout(() => {
-            overlay.style.pointerEvents = 'auto';
-        }, 100);
+            // 3. Ripristina l'overlay sopra al video
+            overlay.style.zIndex = '10';
+        }, 200);
     });
 });
