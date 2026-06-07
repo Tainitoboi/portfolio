@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. VARIABILI E IMPOSTAZIONI GLOBALI
-   ========================================================================== */
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
@@ -48,9 +45,6 @@ body.no-scroll {
     overflow: hidden;
 }
 
-/* ==========================================================================
-   2. TIPOGRAFIA GLOBALE E LINK
-   ========================================================================== */
 a {
     color: var(--text-color);
     text-decoration: none;
@@ -68,9 +62,6 @@ a {
     background: var(--text-color);
 }
 
-/* ==========================================================================
-   3. ELEMENTI ANIMATI & EASTER EGGS (Ottimizzati GPU)
-   ========================================================================== */
 .cross-element {
     position: fixed;
     z-index: 1000;
@@ -108,18 +99,13 @@ a {
     font-size: 3vw;
     user-select: none;
     will-change: transform;
-    
-    /* AGGIUNGI QUESTE RIGHE: */
-    pointer-events: auto !important; /* Costringe il browser a intercettare il mouse */
+    pointer-events: auto !important;
     cursor: default;
     display: inline-block;
     line-height: 1;
-    padding: 3px; /* Crea un'area di contatto (hitbox) più comoda attorno al broccolo */
+    padding: 3px;
 }
 
-/* ==========================================================================
-   4. LAYOUT GENERALE & HEADER/FOOTER (Desktop)
-   ========================================================================== */
 #header {
     width: 100%;
     display: flex;
@@ -199,9 +185,6 @@ a {
     background: var(--text-color);
 }
 
-/* ==========================================================================
-   5. CONTROLLO INPUT (Theme Toggle)
-   ========================================================================== */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -233,9 +216,6 @@ a {
     transition: transform 0.3s, background-color 0.3s;
 }
 
-/* ==========================================================================
-   6. INTERFACCIA E GALLERIA PROGETTI (Desktop index.html)
-   ========================================================================== */
 #gallery {
     display: flex;
     grid-gap: 2.4vw;
@@ -323,9 +303,6 @@ a {
     display: none;
 }
 
-/* ==========================================================================
-   7. PAGINE SPECIFICHE (About & Schede Progetto come Succo)
-   ========================================================================== */
 #sp-container, #sb-container {
     text-align: center;
     font-size: 1.2vw;
@@ -401,8 +378,8 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10; /* Sta sopra all'iframe */
-    background: transparent; /* Rimane invisibile */
+    z-index: 10;
+    background: transparent;
 }
 
 .img-dual .pixelgif{
@@ -416,9 +393,6 @@ a {
     text-align: center;
 }
 
-/* ==========================================================================
-   8. MENU MOBILE OVERLAY
-   ========================================================================== */
 #mobile-menu {
     position: fixed;
     top: 0;
@@ -448,9 +422,6 @@ a {
     visibility: visible;
 }
 
-/* ==========================================================================
-   9. RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
 @media (max-width: 1024px) {
     .cross-element { display: none; }
     #header { height: 20vw; }
@@ -596,16 +567,11 @@ a {
     }
 }
 
-/* ==========================================================================
-   GESTIONE CURSORE PERSONALIZZATO (Solo Desktop)
-   ========================================================================== */
 @media (min-width: 1025px) {
-    /* 1. Nasconde il cursore standard */
     html, body, a, button, .image-container, .theme-toggle, .cross-element, .logo, .broccoli {
         cursor: none !important;
     }
     
-    /* 2. Stato Default */
     #custom-cursor {
         width: 16px;
         height: 16px;
@@ -622,9 +588,7 @@ a {
         visibility: visible;
         transform: translate3d(-50%, -50%, 0) scale(1);
         will-change: transform, opacity;
-        
-        /* MODIFICATO: Rimosso "all". Ora la transizione si applica SOLO a dimensioni, 
-           colori e opacità, escludendo il movimento transform per una reattività immediata */
+
         transition: 
             width 0.2s ease-out, 
             height 0.2s ease-out, 
@@ -634,7 +598,6 @@ a {
             visibility 0s ease-out;
     }
 
-    /* 3. Stato HOVER (Sui link e galleria index) */
     html.cursor-hover #custom-cursor {
         width: 28px;
         height: 28px;
@@ -643,20 +606,16 @@ a {
         transform: translate3d(-50%, -50%, 0) scale(1);
     }
 
-    /* 4. Stato FUORI FINESTRA */
     html.cursor-hidden #custom-cursor {
         opacity: 0;
         visibility: hidden;
-        /* Rimosso scale(0) da qui per evitare che la transizione ritardi la scomparsa */
     }
 
-    /* 5. Stato SOPRA AI VIDEO */
     html.cursor-video #custom-cursor {
         opacity: 0;
         visibility: hidden;
     }
 
-    /* Ripristino cursore di sistema sopra il video */
     .video-container, 
     .video-container iframe, 
     .video-container .video-overlay {
