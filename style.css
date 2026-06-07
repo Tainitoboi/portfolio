@@ -382,9 +382,14 @@ a {
     background: transparent;
 }
 
-.img-dual .pixelgif{
+.img-dual .pixelgif {
     width: 75%;
     background-color: var(--bg-color) !important;
+    
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
 
 .credits {
