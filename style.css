@@ -501,6 +501,28 @@ a {
         padding-bottom: 10vw;
         width: 75%;
     }
+
+    .image-container img,
+    .img-dual img {
+        filter: none !important;
+        transition: none !important;
+    }
+    
+    .image-container:hover img,
+    .img-dual img:hover {
+        filter: none !important;
+    }
+
+    .link:hover, 
+    .tab-link:hover, 
+    #mobile-menu a:hover,
+    .link:active,
+    .tab-link:active, .scheda-title {
+        color: inherit !important;
+        opacity: 1 !important;
+        text-decoration: none;
+        background: transparent !important;
+    }
 }
 
 @media (max-width: 600px) {
