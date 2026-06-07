@@ -349,6 +349,8 @@ a {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1vw;
     justify-items: center;
+
+    background-color: var(--bg-color) !important;
 }
 
 .img-dual img, .img-dual video {
@@ -384,8 +386,8 @@ a {
 
 .img-dual .pixelgif {
     width: 75%;
-    background-color: white;
-    
+    background-color: var(--bg-color) !important;
+
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
