@@ -384,7 +384,7 @@ a {
 
 .img-dual .pixelgif{
     width: 75%;
-    background-color: transparent;
+    background-color: var(--bg-color) !important;
 }
 
 .credits {
