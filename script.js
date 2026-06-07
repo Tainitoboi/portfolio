@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. DICHIARAZIONE VARIABILI E ELEMENTI DOM
-   ========================================================================== */
 const html = document.documentElement;
 const loghino = document.getElementById("loghino");
 const mobileMenu = document.getElementById("mobile-menu");
@@ -17,19 +14,17 @@ const filters = {
     "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"
 };
 
-// Coordinate per il tracciamento del cursore personalizzato
+
 let mouseX = -100;
 let mouseY = -100;
 
-// DEFINIZIONE GLOBALE HOVER TARGETS (Spostata qui per evitare blocchi su mobile)
+
 let hoverTargets = '.link, .tab-link, #mobile-menu a, .video-overlay, .theme-toggle, .cross-element, .logo, .broccoli';
 if (document.getElementById('gallery') || document.getElementById('gallery-mobile')) {
     hoverTargets += ', #gallery .image-container, #gallery-mobile .image-container';
 }
 
-/* ==========================================================================
-   2. GESTIONE SCROLL
-   ========================================================================== */
+
 if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
 }
@@ -38,9 +33,7 @@ window.addEventListener('load', () => {
     window.scrollTo(0, 0);
 });
 
-/* ==========================================================================
-   3. FUNZIONI LOGICHE DEL TEMA (Istantaneo e sincronizzato)
-   ========================================================================== */
+
 function applyTheme(isDark) {
     if (isDark) {
         html.setAttribute("data-theme", "dark");
@@ -73,9 +66,7 @@ function toggleTheme() {
     applyTheme(isDark);
 }
 
-/* ==========================================================================
-   4. INTERAZIONI DI NAVIGAZIONE E INTERFACCIA
-   ========================================================================== */
+
 document.querySelectorAll('.image-container').forEach(container => {
     container.addEventListener('click', function() {
         const url = this.dataset.url;
@@ -98,14 +89,12 @@ document.querySelectorAll("#mobile-menu a").forEach(link => {
     });
 });
 
-/* ==========================================================================
-   5. GESTIONE CURSORE PERSONALIZZATO (Solo Desktop - Movimento Istantaneo)
-   ========================================================================== */
+
 if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
-    // MODIFICATO: Sposta il cursore ISTANTANEAMENTE nell'esatto momento in cui il mouse si muove
     window.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
+        
         customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
     });
 
@@ -131,15 +120,62 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
     });
 }
 
-/* ==========================================================================
-   6. LOGICA DI SPAWN E FISICA DEI BROCCOLI 
-   ========================================================================== */
-// ... (tieni pure invariata la funzione spawnBroccoli() così com'è) ...
 
-// MOTORE GLOBALE DI ANIMAZIONE (Ora calcola SOLO la fisica dei broccoli, lasciando stare il cursore)
+const activeBroccoliList = [];
+
+function spawnBroccoli() {
+    const broccoli = document.createElement("div");
+    broccoli.className = "broccoli";
+    broccoli.textContent = "🥦";
+    
+    const x = Math.random() * (window.innerWidth - 40);
+    const y = Math.random() * (window.innerHeight - 40);
+    const rotation = Math.random() * 360;
+
+    broccoli.style.left = x + "px";
+    broccoli.style.top = y + "px";
+    broccoli.style.transform = `rotate(${rotation}deg)`;
+
+    if (activeFilter) {
+        broccoli.style.filter = activeFilter;
+    }
+
+    document.body.appendChild(broccoli);
+
+    const broccoliData = {
+        element: broccoli,
+        x: x,
+        y: y,
+        vx: 0,
+        vy: 0,
+        rotation: rotation,
+        vRot: 0
+    };
+
+    broccoli.addEventListener("mouseenter", (e) => {
+        const rect = broccoli.getBoundingClientRect();
+        const broccoliCenterX = rect.left + rect.width / 2;
+        const broccoliCenterY = rect.top + rect.height / 2;
+
+        let dx = broccoliCenterX - e.clientX;
+        let dy = broccoliCenterY - e.clientY;
+
+        const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+        dx /= distance;
+        dy /= distance;
+
+        const force = 3; 
+
+        broccoliData.vx = dx * force;
+        broccoliData.vy = dy * force;
+        broccoliData.vRot = (Math.random() - 0.5) * 4;
+    });
+
+    activeBroccoliList.push(broccoliData);
+}
+
+
 function globalAnimationLoop() {
-    // RIMOSSO il blocco che muoveva il cursore qui dentro per togliere l'effetto smooth
-
     const friction = 0.94; 
 
     for (let i = activeBroccoliList.length - 1; i >= 0; i--) {
@@ -179,7 +215,10 @@ function globalAnimationLoop() {
     requestAnimationFrame(globalAnimationLoop);
 }
 
-// Gestione clic sul logo
+
+requestAnimationFrame(globalAnimationLoop);
+
+
 loghino?.addEventListener("click", () => {
     if (window.matchMedia("(max-width: 1024px)").matches) {
         mobileMenu?.classList.toggle("open");
@@ -189,16 +228,14 @@ loghino?.addEventListener("click", () => {
     spawnBroccoli();
 });
 
-// Spawn automatico ogni 5 secondi su desktop
+
 setInterval(() => {
     if (!window.matchMedia("(max-width: 1024px)").matches) {
         spawnBroccoli();
     }
 }, 5000);
 
-/* ==========================================================================
-   7. ASSEGNAZIONE EVENTI TOGGLE E INITIALIZATION
-   ========================================================================== */
+
 themeToggle?.addEventListener("click", toggleTheme);
 themeToggleMobile?.addEventListener("click", toggleTheme);
 
@@ -216,9 +253,7 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e)
     }
 });
 
-/* ==========================================================================
-   8. EASTER EGGS (Filtri delle croci)
-   ========================================================================== */
+
 crosses.forEach(cross => {
     cross.addEventListener("click", () => {
         if (!document.querySelector(".broccoli")) {
@@ -243,23 +278,18 @@ crosses.forEach(cross => {
     });
 });
 
-/* ==========================================================================
-   9. INTERAZIONE CURSORE CUSTOM SU VIDEO CONTAINER (Ripristino cursore nativo)
-   ========================================================================== */
+
 document.querySelectorAll('.video-container').forEach(container => {
     const overlay = container.querySelector('.video-overlay');
     
-    // Rimuoviamo la necessità di bloccare i pointer-events sull'overlay per lasciare l'iframe libero
     if (overlay) {
         overlay.style.pointerEvents = 'none'; 
     }
 
-    // Quando il mouse entra nel video, nascondiamo il cerchio nero custom
     container.addEventListener('mouseenter', () => {
         html.classList.add('cursor-video');
     });
     
-    // Quando il mouse esce dal video, facciamo tornare il cerchio nero custom
     container.addEventListener('mouseleave', () => {
         html.classList.remove('cursor-video');
     });
