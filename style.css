@@ -384,7 +384,7 @@ a {
 
 .img-dual .pixelgif {
     width: 75%;
-    background-color: var(--bg-color) !important;
+    background-color: white;
     
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
