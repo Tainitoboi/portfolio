@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+    const initialTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    if (initialTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <title>Tainito - Quick Kitchen</title>
+
+    <link rel="icon" type="image/png" href="assets/tainito_favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div>
+        <img src="assets/cross.png" class="cross-element" id="cross-1">
+        <img src="assets/cross.png" class="cross-element" id="cross-2">
+        <img src="assets/cross.png" class="cross-element" id="cross-3">
+        <img src="assets/cross.png" class="cross-element" id="cross-4">
+    </div>
+    
+    <div id="header">
+         <img class="logo" id="loghino" src="assets/tainito_logo.png">
+    </div>
+
+    <div id="mobile-menu">
+        <a href="index.html">Projects</a>
+        <a href="about.html">About</a>
+        <div class="theme-toggle" id="theme-toggle-mobile">
+            <div class="toggle-track">
+                <div class="toggle-knob"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col12" id="content">
+        <div class="paragraph">
+            <div id="st-container"><a class="scheda-title">Quick Kitchen</a></div>
+            <div id="ss-container"><a class="scheda-subtitle">2023</a></div>
+        </div>
+        <div class="video-container">
+            <iframe
+                src="https://www.youtube.com/embed/G5LbmA7_CSs?si=zNxyPUAwYt7Gg-CN"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="paragraph6">
+            <a>Quick Kitchen is my first animated short made with two of my friends, recreating a scene from the movie "X-Men: Days of Future Past", in which Quicksilver tries to help Magneto escape from maximum security prison. Compared to the original, it adopts a cartoonish style, which often takes up the universe of American comics, especially in the character design. All the scenes are modeled and animated in Blender and the post-production is made in After Effects.</a>
+        </div>
+        <div class="image-container">
+            <img src="assets/projects/quick kitchen/quick kitchen_ss1.png">
+        </div>
+        <div class="image-container">
+            <img src="assets/projects/quick kitchen/quick kitchen_ss4.png">
+        </div>
+        <div class="credits">
+            <a>Created with: A. Ruggiu and D. Vitrano.</a>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="column-navbar">
+            <div class="nav-content">
+                <a href="index.html" id="btn-info" class="tab-link active">Projects</a>
+                <span id="sep-1" class="separator active"> • </span>
+                <a href="about.html" id="btn-class" class="tab-link nav-inactive">About</a>
+            </div>
+        </div>
+        <div class="column-navbar">
+            <div class="nav-content">
+                <a>© Tainito 2026.</a>
+                <div class="theme-toggle" id="theme-toggle">
+                    <div class="toggle-track">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
