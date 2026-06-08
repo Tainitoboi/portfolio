@@ -3,13 +3,18 @@
 <head>
     <script>
     const initialTheme = localStorage.getItem("theme");
-
     if(initialTheme){
         document.documentElement.className =
             initialTheme === "dark"
                 ? "dark-mode"
                 : "light-mode";
     }
+    </script>
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
     </script>
 
     <meta charset="UTF-8">
@@ -272,5 +277,5 @@
         </div>
     </div>
 </body>
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </html>
