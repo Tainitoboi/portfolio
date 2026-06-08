@@ -4,6 +4,8 @@ const mobileMenu = document.getElementById("mobile-menu");
 const themeToggle = document.getElementById("theme-toggle");
 const themeToggleMobile = document.getElementById("theme-toggle-mobile");
 const crosses = document.querySelectorAll(".cross-element");
+
+
 const customCursor = document.getElementById("custom-cursor");
 
 let activeFilter = null;
@@ -14,10 +16,8 @@ const filters = {
     "cross-4": "grayscale(1) contrast(1) brightness(0.8) sepia(1) saturate(8) hue-rotate(240deg)"
 };
 
-
 let mouseX = -100;
 let mouseY = -100;
-
 
 let hoverTargets = '.link, .tab-link, #mobile-menu a, .video-overlay, .theme-toggle, .cross-element, .logo, .broccoli';
 if (document.getElementById('gallery') || document.getElementById('gallery-mobile')) {
@@ -28,10 +28,6 @@ if (document.getElementById('gallery') || document.getElementById('gallery-mobil
 if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
 }
-
-window.addEventListener('load', () => {
-    window.scrollTo(0, 0);
-});
 
 
 function applyTheme(isDark) {
@@ -67,10 +63,17 @@ function toggleTheme() {
 }
 
 
-document.querySelectorAll('.image-container').forEach(container => {
+document.querySelectorAll('.image-container, .project-row').forEach(container => {
     container.addEventListener('click', function() {
         const url = this.dataset.url;
-        if (url) window.location.href = url;
+        if (url) {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'auto'
+            });
+            window.location.href = url;
+        }
     });
 });
 
@@ -90,16 +93,29 @@ document.querySelectorAll("#mobile-menu a").forEach(link => {
 });
 
 
-if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
+function initCustomCursor() {
+    const cursorEl = customCursor || document.getElementById("custom-cursor");
+    
+    if (!cursorEl || window.matchMedia("(max-width: 1024px)").matches) {
+        return;
+    }
+
     window.addEventListener("mousemove", (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
-        customCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+
+        cursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+
+        cursorEl.style.opacity = "1";
+        cursorEl.style.visibility = "visible";
+
+        html.classList.remove("cursor-hidden");
     });
 
     document.addEventListener("mouseleave", () => {
         html.classList.add("cursor-hidden");
+        cursorEl.style.opacity = "0";
+        cursorEl.style.visibility = "hidden";
     });
 
     document.addEventListener("mouseenter", () => {
@@ -107,6 +123,9 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
     });
     
     document.addEventListener("mouseover", (e) => {
+        if (window.matchMedia("(max-width: 1024px)").matches || window.matchMedia("(hover: none)").matches) {
+            return;
+        }
         if (e.target.closest(hoverTargets)) {
             html.classList.add("cursor-hover");
         }
@@ -114,11 +133,12 @@ if (customCursor && !window.matchMedia("(max-width: 1024px)").matches) {
 
     document.addEventListener("mouseout", (e) => {
         if (!e.relatedTarget || !e.relatedTarget.closest(hoverTargets)) {
-            html.classList.remove("cursor-hidden");
             html.classList.remove("cursor-hover");
         }
     });
 }
+
+initCustomCursor();
 
 
 const activeBroccoliList = [];
@@ -174,7 +194,6 @@ function spawnBroccoli() {
     activeBroccoliList.push(broccoliData);
 }
 
-
 function globalAnimationLoop() {
     const friction = 0.94; 
 
@@ -215,9 +234,7 @@ function globalAnimationLoop() {
     requestAnimationFrame(globalAnimationLoop);
 }
 
-
 requestAnimationFrame(globalAnimationLoop);
-
 
 loghino?.addEventListener("click", () => {
     if (window.matchMedia("(max-width: 1024px)").matches) {
@@ -227,7 +244,6 @@ loghino?.addEventListener("click", () => {
     }
     spawnBroccoli();
 });
-
 
 setInterval(() => {
     if (!window.matchMedia("(max-width: 1024px)").matches) {
