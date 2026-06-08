@@ -349,7 +349,6 @@ a {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1vw;
     justify-items: center;
-
     background-color: var(--bg-color) !important;
 }
 
@@ -387,7 +386,6 @@ a {
 .img-dual .pixelgif {
     width: 75%;
     background-color: var(--bg-color) !important;
-
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
@@ -511,13 +509,15 @@ a {
     }
 
     .image-container img,
-    .img-dual img {
+    .img-dual img,
+    .img-dual .pixelgif {
         filter: none !important;
         transition: none !important;
     }
     
     .image-container:hover img,
-    .img-dual img:hover {
+    .img-dual img:hover,
+    .img-dual .pixelgif:hover {
         filter: none !important;
     }
 
@@ -614,18 +614,18 @@ a {
         pointer-events: none;
         z-index: 10000;
         
-        opacity: 1;
-        visibility: visible;
+        opacity: 0;
+        visibility: hidden;
         transform: translate3d(-50%, -50%, 0) scale(1);
         will-change: transform, opacity;
-
+        
         transition: 
             width 0.2s ease-out, 
             height 0.2s ease-out, 
-            background-color 0.3s ease, 
-            border-color 0.3s ease,
-            opacity 0s ease-out,
-            visibility 0s ease-out;
+            background-color 0.1s ease, 
+            border-color 0.1s ease,
+            opacity 0.05s ease-out,
+            visibility 0.05s ease-out;
     }
 
     html.cursor-hover #custom-cursor {
@@ -637,13 +637,13 @@ a {
     }
 
     html.cursor-hidden #custom-cursor {
-        opacity: 0;
-        visibility: hidden;
+        opacity: 0 !important;
+        visibility: hidden !important;
     }
 
     html.cursor-video #custom-cursor {
-        opacity: 0;
-        visibility: hidden;
+        opacity: 0 !important;
+        visibility: hidden !important;
     }
 
     .video-container, 
